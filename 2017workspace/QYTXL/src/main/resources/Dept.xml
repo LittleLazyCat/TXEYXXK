@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.txey.qytxl.dao.mybatis.DeptMybatisDao">
+	<select id="getDept" resultMap="DeptMap">
+		SELECT
+		ksid,ksmc,ksmcpy,kslxid,yddh,dxdh,ksbz
+		FROM tb_emp_dept
+	</select>
+	<resultMap type="Dept" id="DeptMap">
+		<constructor>
+			<idArg column="ksid" javaType="int" />
+			<arg column="ksmc" javaType="String" />
+			<arg column="ksmcpy" javaType="String" />
+			<arg column="kslxid" javaType="int" />
+			<arg column="yddh" javaType="String" />
+			<arg column="dxdh" javaType="String" />
+			<arg column="ksbz" javaType="String" />
+		</constructor>
+	</resultMap>
+	<select id="findDeptByName" parameterType="String"
+	resultType="com.txey.qytxl.model.Dept">
+		SELECT
+		ksid,ksmc,ksmcpy,kslxid,yddh,dxdh,ksbz
+		FROM tb_emp_dept WHERE ksmc LIKE #{Name} OR ksmcpy LIKE #{Name}
+	</select>
+</mapper>
