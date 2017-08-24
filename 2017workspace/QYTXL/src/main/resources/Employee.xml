@@ -35,6 +35,6 @@
 	</select>
 
 	<update id="updateEmp" parameterType="Employee">
-		UPDATE tb_employee SET sjch=#{sjch},xnw=#{xnw} WHERE ygbh = #{ygbh}
+		UPDATE sys_user SET user_phone=#{sjch},user_dh=#{xnw} WHERE user_account = #{ygbh}
 	</update>
 </mapper>

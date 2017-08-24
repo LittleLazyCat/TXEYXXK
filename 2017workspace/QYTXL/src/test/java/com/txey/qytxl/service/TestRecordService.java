@@ -43,7 +43,7 @@ public class TestRecordService {
 
 	@Test
 	public void findEmpByuserName() {
-		List<Employee> employeeList = employeeService.findEmpByName("ZXJ");
+		List<Employee> employeeList = employeeService.findEmpByName("ZK");
 		for (Employee el : employeeList) {
 			System.out.println(el);
 		}
@@ -65,7 +65,7 @@ public class TestRecordService {
 		Employee employee = new Employee();
 		employee.setYgbh("M028");
 		employee.setSjch("18367852176");
-		employee.setXnw("622176");
+		employee.setXnw("712176");
 
 		employeeService.updateEmp(employee);
 	}
