@@ -1,0 +1,166 @@
+{
+    "res": {
+        "shop:pages/client/buy/default/scripts/ImageZoom.js": {
+            "uri": "/show/static/shop/pages/client/buy/default/scripts/ImageZoom.js",
+            "type": "js"
+        },
+        "shop:pages/client/buy/default/scripts/iZoomPath.js": {
+            "uri": "/show/static/shop/pages/client/buy/default/scripts/iZoomPath.js",
+            "type": "js"
+        },
+        "shop:pages/client/buy/default/styles/home_goods.css": {
+            "uri": "/show/static/shop/pages/client/buy/default/styles/home_goods.css",
+            "type": "css"
+        },
+        "shop:pages/client/buy/default/styles/home_header.css": {
+            "uri": "/show/static/shop/pages/client/buy/default/styles/home_header.css",
+            "type": "css"
+        },
+        "shop:pages/client/member/default/styles/member.css": {
+            "uri": "/show/static/shop/pages/client/member/default/styles/member.css",
+            "type": "css"
+        },
+        "shop:pages/client/storehome/default/style.css": {
+            "uri": "/show/static/shop/pages/client/storehome/default/style.css",
+            "type": "css"
+        },
+        "shop:scripts/admin/appleStoreJoinin.js": {
+            "uri": "/show/static/shop/scripts/admin/appleStoreJoinin.js",
+            "type": "js"
+        },
+        "shop:scripts/admin/goodsAttribute.js": {
+            "uri": "/show/static/shop/scripts/admin/goodsAttribute.js",
+            "type": "js"
+        },
+        "shop:scripts/admin/goodsBrand.js": {
+            "uri": "/show/static/shop/scripts/admin/goodsBrand.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js",
+                "common:widget/jquery/jquery.form.js"
+            ]
+        },
+        "shop:scripts/admin/goodsType.js": {
+            "uri": "/show/static/shop/scripts/admin/goodsType.js",
+            "type": "js"
+        },
+        "shop:scripts/album.js": {
+            "uri": "/show/static/shop/scripts/album.js",
+            "type": "js"
+        },
+        "shop:scripts/area_array.js": {
+            "uri": "/show/static/shop/scripts/area_array.js",
+            "type": "js"
+        },
+        "shop:scripts/common_select.js": {
+            "uri": "/show/static/shop/scripts/common_select.js",
+            "type": "js"
+        },
+        "shop:scripts/common.js": {
+            "uri": "/show/static/shop/scripts/common.js",
+            "type": "js"
+        },
+        "shop:scripts/dialog/dialog.css": {
+            "uri": "/show/static/shop/scripts/dialog/dialog.css",
+            "type": "css"
+        },
+        "shop:scripts/dialog/dialog.js": {
+            "uri": "/show/static/shop/scripts/dialog/dialog.js",
+            "type": "js",
+            "deps": [
+                "shop:scripts/dialog/dialog.css"
+            ]
+        },
+        "shop:scripts/goods_cart.js": {
+            "uri": "/show/static/shop/scripts/goods_cart.js",
+            "type": "js"
+        },
+        "shop:scripts/jqtreetable.js": {
+            "uri": "/show/static/shop/scripts/jqtreetable.js",
+            "type": "js"
+        },
+        "shop:scripts/member.js": {
+            "uri": "/show/static/shop/scripts/member.js",
+            "type": "js"
+        },
+        "shop:scripts/page.step2.js": {
+            "uri": "/show/static/shop/scripts/page.step2.js",
+            "type": "js"
+        },
+        "shop:scripts/page.step3.js": {
+            "uri": "/show/static/shop/scripts/page.step3.js",
+            "type": "js"
+        },
+        "shop:scripts/perfect-scrollbar.min.js": {
+            "uri": "/show/static/shop/scripts/perfect-scrollbar.min.js",
+            "type": "js"
+        },
+        "shop:scripts/piclist.js": {
+            "uri": "/show/static/shop/scripts/piclist.js",
+            "type": "js"
+        },
+        "shop:scripts/plateAdd.js": {
+            "uri": "/show/static/shop/scripts/plateAdd.js",
+            "type": "js"
+        },
+        "shop:scripts/seller.js": {
+            "uri": "/show/static/shop/scripts/seller.js",
+            "type": "js"
+        },
+        "shop:scripts/shop.js": {
+            "uri": "/show/static/shop/scripts/shop.js",
+            "type": "js"
+        },
+        "shop:scripts/store_goods_add.step1.js": {
+            "uri": "/show/static/shop/scripts/store_goods_add.step1.js",
+            "type": "js"
+        },
+        "shop:scripts/store_goods_add.step2.js": {
+            "uri": "/show/static/shop/scripts/store_goods_add.step2.js",
+            "type": "js"
+        },
+        "shop:scripts/store_goods_add.step3.js": {
+            "uri": "/show/static/shop/scripts/store_goods_add.step3.js",
+            "type": "js"
+        },
+        "shop:scripts/store_goods_list.js": {
+            "uri": "/show/static/shop/scripts/store_goods_list.js",
+            "type": "js"
+        },
+        "shop:scripts/store_slide.js": {
+            "uri": "/show/static/shop/scripts/store_slide.js",
+            "type": "js"
+        },
+        "shop:styles/base.css": {
+            "uri": "/show/static/shop/styles/base.css",
+            "type": "css"
+        },
+        "shop:styles/home_cart.css": {
+            "uri": "/show/static/shop/styles/home_cart.css",
+            "type": "css"
+        },
+        "shop:styles/home_login.css": {
+            "uri": "/show/static/shop/styles/home_login.css",
+            "type": "css"
+        },
+        "shop:styles/seller_center.css": {
+            "uri": "/show/static/shop/styles/seller_center.css",
+            "type": "css"
+        },
+        "shop:styles/shop.css": {
+            "uri": "/show/static/shop/styles/shop.css",
+            "type": "css"
+        },
+        "shop:styles/skin_0.css": {
+            "uri": "/show/static/shop/styles/skin_0.css",
+            "type": "css"
+        },
+        "shop:styles/store_joinin.css": {
+            "uri": "/show/static/shop/styles/store_joinin.css",
+            "type": "css"
+        }
+    },
+    "pkg": {}
+}

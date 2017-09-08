@@ -1,0 +1,63 @@
+{
+    "res": {
+        "cms:scripts/news.js": {
+            "uri": "/show/static/cms/scripts/news.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js",
+                "common:widget/jquery/jquery.form.js"
+            ]
+        },
+        "cms:scripts/newsCategory.js": {
+            "uri": "/show/static/cms/scripts/newsCategory.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/jquery/jquery.Jcrop.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js",
+                "common:widget/jquery/jquery.form.js",
+                "cms:styles/newsCategory.css"
+            ]
+        },
+        "cms:scripts/newscontainer.js": {
+            "uri": "/show/static/cms/scripts/newscontainer.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "cms:scripts/publishInfo.js": {
+            "uri": "/show/static/cms/scripts/publishInfo.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js",
+                "common:widget/jquery/jquery.form.js",
+                "common:widget/dhtmlxSuite/ext/dhtmlxform_item_kindeditor.js"
+            ]
+        },
+        "cms:styles/base.css": {
+            "uri": "/show/static/cms/styles/base.css",
+            "type": "css"
+        },
+        "cms:styles/home_header.css": {
+            "uri": "/show/static/cms/styles/home_header.css",
+            "type": "css"
+        },
+        "cms:styles/layout.css": {
+            "uri": "/show/static/cms/styles/layout.css",
+            "type": "css"
+        },
+        "cms:styles/newsCategory.css": {
+            "uri": "/show/static/cms/styles/newsCategory.css",
+            "type": "css"
+        }
+    },
+    "pkg": {}
+}

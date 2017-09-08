@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.test.dao.TestDao">
+    
+    <sql id="testColumns">
+		a.*,
+		o.id AS "office.id",
+		o.name AS "office.name"
+	</sql>
+	<sql id="testOracle">
+		o.code AS Code,
+		o.capital AS Capital,
+		o.region AS Region,
+		o.province AS Province,
+		o.city AS City,
+		o.district AS District
+	</sql>
+
+	<resultMap id="Area" type="TestArea">
+		<id property="code" column="Code"/>
+		<result property="capital" column="Capital"/>
+		<result property="region" column="Region"/>
+		<result property="province" column="Province"/>
+		<result property="city" column="City"/>
+		<result property="district" column="District"/>
+
+	</resultMap>
+
+
+
+
+
+
+	<sql id="testJoins">
+		JOIN sys_office o ON o.id = a.office_id
+    </sql>
+    
+    <select id="get" resultType="Test">
+		SELECT 
+			<include refid="testColumns"/>
+		FROM sys_user a
+		<include refid="testJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Test">
+		SELECT 
+			<include refid="testColumns"/>
+		FROM sys_user a
+		<include refid="testJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} 
+		<if test="name != null and name != ''">
+			AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+		</if>
+		ORDER BY a.id DESC
+	</select>
+	
+	<select id="findAllList" resultType="Test">
+		SELECT 
+			<include refid="testColumns"/>
+		FROM sys_user a
+		<include refid="testJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} 
+		ORDER BY a.id DESC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_user(
+			id, 
+			name, 
+			create_by, 
+			create_date, 
+			update_by, 
+			update_date, 
+			remarks, 
+			del_flag
+		) VALUES (
+			#{id}, 
+			#{name}, 
+			#{createBy.id}, 
+			#{createDate}, 
+			#{updateBy.id}, 
+			#{updateDate}, 
+			#{remarks}, 
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_user SET 
+			name = #{name}, 
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}, 
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE sys_user SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

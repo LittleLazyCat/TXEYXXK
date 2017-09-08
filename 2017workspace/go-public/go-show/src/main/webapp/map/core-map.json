@@ -1,0 +1,268 @@
+{
+    "res": {
+        "core:scripts/attachment.js": {
+            "uri": "/show/static/core/scripts/attachment.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js",
+                "common:widget/jquery/jquery.form.js"
+            ]
+        },
+        "core:scripts/changePassword.js": {
+            "uri": "/show/static/core/scripts/changePassword.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jquery.form.js",
+                "core:styles/style.css",
+                "common:styles/bootstrap.css"
+            ]
+        },
+        "core:scripts/dynamicModels.js": {
+            "uri": "/show/static/core/scripts/dynamicModels.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:scripts/entityModels.js": {
+            "uri": "/show/static/core/scripts/entityModels.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:scripts/framework.js": {
+            "uri": "/show/static/core/scripts/framework.js",
+            "type": "js",
+            "deps": [
+                "common:scripts/global.js",
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:scripts/login.js": {
+            "uri": "/show/static/core/scripts/login.js",
+            "type": "js",
+            "deps": [
+                "core:styles/login.css",
+                "common:widget/jquery/jquery.js"
+            ]
+        },
+        "core:scripts/mainPage.js": {
+            "uri": "/show/static/core/scripts/mainPage.js",
+            "type": "js",
+            "deps": [
+                "common:scripts/global.js",
+                "core:styles/mainPage.css"
+            ]
+        },
+        "core:scripts/menu.js": {
+            "uri": "/show/static/core/scripts/menu.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:scripts/permissionURL.js": {
+            "uri": "/show/static/core/scripts/permissionURL.js",
+            "type": "js",
+            "deps": [
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:scripts/resource.js": {
+            "uri": "/show/static/core/scripts/resource.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:scripts/resourceRole.js": {
+            "uri": "/show/static/core/scripts/resourceRole.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:scripts/role.js": {
+            "uri": "/show/static/core/scripts/role.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:scripts/roleUser.js": {
+            "uri": "/show/static/core/scripts/roleUser.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:scripts/sqlModels.js": {
+            "uri": "/show/static/core/scripts/sqlModels.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:scripts/user.js": {
+            "uri": "/show/static/core/scripts/user.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:scripts/userRole.js": {
+            "uri": "/show/static/core/scripts/userRole.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:styles/login.css": {
+            "uri": "/show/static/core/styles/login.css",
+            "type": "css",
+            "pkg": "core:p0"
+        },
+        "core:styles/mainPage.css": {
+            "uri": "/show/static/core/styles/mainPage.css",
+            "type": "css"
+        },
+        "core:styles/style.css": {
+            "uri": "/show/static/core/styles/style.css",
+            "type": "css",
+            "pkg": "core:p0"
+        },
+        "core:widget/tpl/DetailQuery/detailquery.js": {
+            "uri": "/show/static/core/widget/tpl/DetailQuery/detailquery.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:widget/tpl/OneToMany/onetomany.js": {
+            "uri": "/show/static/core/widget/tpl/OneToMany/onetomany.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:widget/tpl/ReportQuery/reportQuery.js": {
+            "uri": "/show/static/core/widget/tpl/ReportQuery/reportQuery.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:widget/tpl/ReportShowQuery/reportShowQuery.js": {
+            "uri": "/show/static/core/widget/tpl/ReportShowQuery/reportShowQuery.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:widget/tpl/SingleGrid/singlegrid.js": {
+            "uri": "/show/static/core/widget/tpl/SingleGrid/singlegrid.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:widget/tpl/SingleGridQuery/singlegridquery.js": {
+            "uri": "/show/static/core/widget/tpl/SingleGridQuery/singlegridquery.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:widget/tpl/toolbarCleanData.js": {
+            "uri": "/show/static/core/widget/tpl/toolbarCleanData.js",
+            "type": "js"
+        },
+        "core:widget/tpl/toolbarHide.js": {
+            "uri": "/show/static/core/widget/tpl/toolbarHide.js",
+            "type": "js"
+        },
+        "core:widget/tpl/TreeFrom/treefrom.js": {
+            "uri": "/show/static/core/widget/tpl/TreeFrom/treefrom.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:widget/tpl/TreeGrid/treegrid.js": {
+            "uri": "/show/static/core/widget/tpl/TreeGrid/treegrid.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:widget/tpl/TreeOneToMany/treeonetomany.js": {
+            "uri": "/show/static/core/widget/tpl/TreeOneToMany/treeonetomany.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        },
+        "core:widget/tpl/TreeTwoOneToMany/treetwoonetomany.js": {
+            "uri": "/show/static/core/widget/tpl/TreeTwoOneToMany/treetwoonetomany.js",
+            "type": "js",
+            "deps": [
+                "common:widget/jquery/jqueryEx.js",
+                "common:widget/utils/underscore.js",
+                "common:widget/dhtmlxSuite/dhtmlxEx.js"
+            ]
+        }
+    },
+    "pkg": {
+        "core:p0": {
+            "uri": "/show/static/core/pak/login.css",
+            "type": "css",
+            "has": [
+                "core:styles/login.css",
+                "core:styles/style.css"
+            ]
+        }
+    }
+}
