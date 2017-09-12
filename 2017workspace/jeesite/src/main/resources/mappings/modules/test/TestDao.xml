@@ -7,30 +7,7 @@
 		o.id AS "office.id",
 		o.name AS "office.name"
 	</sql>
-	<sql id="testOracle">
-		o.code AS Code,
-		o.capital AS Capital,
-		o.region AS Region,
-		o.province AS Province,
-		o.city AS City,
-		o.district AS District
-	</sql>
-
-	<resultMap id="Area" type="TestArea">
-		<id property="code" column="Code"/>
-		<result property="capital" column="Capital"/>
-		<result property="region" column="Region"/>
-		<result property="province" column="Province"/>
-		<result property="city" column="City"/>
-		<result property="district" column="District"/>
-
-	</resultMap>
-
-
-
-
-
-
+	
 	<sql id="testJoins">
 		JOIN sys_office o ON o.id = a.office_id
     </sql>
