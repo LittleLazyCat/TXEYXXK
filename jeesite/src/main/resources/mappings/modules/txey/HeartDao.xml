@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.txey.dao.HeartDao">
+    <sql id="heartColumns">
+
+    </sql>
+
+    <select id="heartStats" resultType="Heart">
+        SELECT "FYXH","FYMC","SFRQ","YLDJ","YLSL","HJJE" FROM
+        (SELECT sf.fyxh AS fyxh,sf.fymc AS fymc,mz.sfrq AS sfrq,y2.yldj AS yldj,SUM(y2.ylsl) AS ylsl,SUM(y2.hjje) AS
+        hjje
+        FROM
+        ms_yj01 y1 LEFT JOIN ms_mzxx mz ON y1.fphm = mz.fphm
+        LEFT JOIN ms_yj02 y2 ON y1.yjxh=y2.yjxh
+        LEFT JOIN gy_ylsf sf ON y2.ylxh = sf.fyxh
+        <where>
+            <if test="beginDate != null and endDate != ''">
+                to_char(mz.sfrq,'yyyy-mm-dd') BETWEEN <![CDATA[ {beginDate} ]]> AND <![CDATA[  #{endDate} ]]>
+            </if>
+
+            AND y1.fphm IS NOT NULL
+            AND y1.zfpb &lt;&gt; 1
+            AND sf.fyxh IN (2641,2657,2508,10317,1765)
+        </where>
+        GROUP BY sf.fyxh, sf.fymc, y2.yldj,mz.sfrq) t1
+        UNION ALL
+        SELECT "FYXH","FYMC","SFRQ","YLDJ","YLSL","HJJE" FROM
+        (SELECT zy.fyxh AS fyxh,sf.fymc AS fymc,zy.jfrq AS sfrq,zy.fydj AS yldj,SUM(zy.fysl) as ylsl,SUM(zy.zjje) as
+        hjje
+        FROM v_zy_fymx zy LEFT JOIN gy_ylsf sf ON zy.fyxh = sf.fyxh
+        <where>
+            <if test="beginDate != null and endDate != ''">
+                to_char(zy.jfrq,'yyyy-mm-dd') BETWEEN <![CDATA[ {beginDate} ]]> AND <![CDATA[  #{endDate} ]]>
+            </if>
+            AND zy.fyxh IN (2641,2657,2508,10317,1765)
+        </where>
+        GROUP BY zy.fyxh,zy.jfrq,sf.fymc, zy.fydj) t2
+    </select>
+</mapper>
