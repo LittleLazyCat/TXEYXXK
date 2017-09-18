@@ -21,9 +21,18 @@ public class MultipleDataSourceSetup {
     }
 
 
+    public void setEmrDataSource() {
+        MultipleDataSource.setDataSourceKey("emrDataSource");
+    }
+
+
+
     public void setDataSource() {
         MultipleDataSource.setDataSourceKey("dataSource");
     }
+
+
+
 //    @Around("execution(* com.jeesite.modules.cms.web.HeartController.heart*())")
 //    public Object HeartDataSource(ProceedingJoinPoint jp) throws Throwable {
 //        MultipleDataSource.setDataSourceKey("hisServerDataSource");

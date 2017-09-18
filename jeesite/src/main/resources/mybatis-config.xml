@@ -36,6 +36,7 @@
 		<typeAlias alias="Page" type="com.jeesite.common.persistence.Page" /><!--分页 -->
 		<typeAlias alias="TestArea" type="com.jeesite.modules.test.entity.TestArea"></typeAlias>
 		<typeAlias alias="Heart" type="com.jeesite.modules.txey.entity.Heart"></typeAlias>
+		<typeAlias type="com.jeesite.modules.txey.entity.Bcjl" alias="Bcjl"></typeAlias>
 	</typeAliases>
 
 	<!-- 插件配置 -->

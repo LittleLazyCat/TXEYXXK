@@ -6,7 +6,8 @@
     </sql>
 
     <select id="heartStats" resultType="Heart">
-        SELECT "FYXH","FYMC","SFRQ","YLDJ","YLSL","HJJE" FROM
+        SELECT t.fyxh AS "FYXH",t.SFRQ AS "SFRQ",t.fymc AS "FYMC",t.yldj AS "YLDJ",SUM(t.ylsl) AS "YLSL",SUM(t.hjje) AS "HJJE" FROM
+        (SELECT "FYXH","FYMC",TO_CHAR("SFRQ",'yyyy-mm-dd') AS "SFRQ","YLDJ","YLSL","HJJE" FROM
         (SELECT sf.fyxh AS fyxh,sf.fymc AS fymc,mz.sfrq AS sfrq,y2.yldj AS yldj,SUM(y2.ylsl) AS ylsl,SUM(y2.hjje) AS
         hjje
         FROM
@@ -14,26 +15,27 @@
         LEFT JOIN ms_yj02 y2 ON y1.yjxh=y2.yjxh
         LEFT JOIN gy_ylsf sf ON y2.ylxh = sf.fyxh
         <where>
-            <if test="beginDate != null and endDate != ''">
-                to_char(mz.sfrq,'yyyy-mm-dd') BETWEEN <![CDATA[ {beginDate} ]]> AND <![CDATA[  #{endDate} ]]>
+            <if test="beginDate != null and endDate != null">
+                to_char(mz.sfrq,'YYYY-MM-DD') BETWEEN <![CDATA[  #{beginDate} ]]> AND <![CDATA[  #{endDate} ]]>
             </if>
 
             AND y1.fphm IS NOT NULL
-            AND y1.zfpb &lt;&gt; 1
+            AND y1.zfpb <![CDATA[ <> ]]> 1
             AND sf.fyxh IN (2641,2657,2508,10317,1765)
         </where>
         GROUP BY sf.fyxh, sf.fymc, y2.yldj,mz.sfrq) t1
         UNION ALL
-        SELECT "FYXH","FYMC","SFRQ","YLDJ","YLSL","HJJE" FROM
+        SELECT "FYXH","FYMC",TO_CHAR("SFRQ",'yyyy-mm-dd') AS "SFRQ","YLDJ","YLSL","HJJE" FROM
         (SELECT zy.fyxh AS fyxh,sf.fymc AS fymc,zy.jfrq AS sfrq,zy.fydj AS yldj,SUM(zy.fysl) as ylsl,SUM(zy.zjje) as
         hjje
         FROM v_zy_fymx zy LEFT JOIN gy_ylsf sf ON zy.fyxh = sf.fyxh
         <where>
-            <if test="beginDate != null and endDate != ''">
-                to_char(zy.jfrq,'yyyy-mm-dd') BETWEEN <![CDATA[ {beginDate} ]]> AND <![CDATA[  #{endDate} ]]>
+            <if test="beginDate != null and endDate != null">
+                to_char(zy.jfrq,'YYYY-MM-DD') BETWEEN <![CDATA[ #{beginDate} ]]> AND <![CDATA[  #{endDate} ]]>
             </if>
             AND zy.fyxh IN (2641,2657,2508,10317,1765)
         </where>
-        GROUP BY zy.fyxh,zy.jfrq,sf.fymc, zy.fydj) t2
+        GROUP BY zy.fyxh,zy.jfrq,sf.fymc, zy.fydj) t2) t
+        GROUP BY t.fyxh,t.fymc,t.SFRQ,t.yldj ORDER BY t.fymc,t.SFRQ DESC
     </select>
 </mapper>

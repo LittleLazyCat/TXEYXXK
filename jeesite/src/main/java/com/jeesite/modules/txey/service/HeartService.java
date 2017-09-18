@@ -20,18 +20,26 @@ public class HeartService {
     private HeartDao heartDao;
     public List<Heart> heartStats(Map<String, Object> paramMap){
         Heart heart = new Heart();
-        Date beginDate = DateUtils.parseDate(paramMap.get("beginDate"));
-        if (beginDate == null) {
-            beginDate = DateUtils.setDays(new Date(), 1);
+        Date beginDate = null;
+        Date endDate = null;
+        if (paramMap.get("beginDate") == null) {
+            beginDate = DateUtils.setDays(DateUtils.parseDate(DateUtils.getDate()), 1);
             paramMap.put("beginDate", DateUtils.formatDate(beginDate, "yyyy-MM-dd"));
+        } else {
+            beginDate = DateUtils.setDays(DateUtils.parseDate(paramMap.get("beginDate")), 1);
         }
-        heart.setbeginDate(beginDate);
-        Date endDate = DateUtils.parseDate(paramMap.get("endDate"));
-        if (endDate == null){
+        if (paramMap.get("endDate") == null) {
             endDate = DateUtils.addDays(DateUtils.addMonths(beginDate, 1), -1);
             paramMap.put("endDate", DateUtils.formatDate(endDate, "yyyy-MM-dd"));
+        } else {
+            endDate = DateUtils.parseDate(paramMap.get("endDate"));
         }
-        heart.setendDate(endDate);
+
+
+        heart.setbeginDate(paramMap.get("beginDate").toString());
+        heart.setendDate(paramMap.get("endDate").toString());
+        //System.out.println(heart);
+
         return heartDao.heartStats(heart);
     }
 }

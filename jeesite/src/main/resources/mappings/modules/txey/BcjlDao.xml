@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.txey.dao.BcjlDao">
+    <select id="getBcjl" resultType="Bcjl">
+        SELECT  b.dname AS dname,a.jlsj AS jlsj,to_char(a.jlnr) AS jlnr,a.typeid as typeid FROM T_ZYYS_BCJL a LEFT JOIN T_XT_YHB b ON a.DID = b.DID WHERE a.zyxh = (SELECT zyxh FROM t_xt_zybr WHERE bah = <![CDATA[  #{bah} ]]> ) ORDER BY a.jlsj
+    </select>
+
+</mapper>

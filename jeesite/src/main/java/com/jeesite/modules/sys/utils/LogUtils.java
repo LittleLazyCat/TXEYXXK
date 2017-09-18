@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.jeesite.modules.data.MultipleDataSource;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.method.HandlerMethod;
 
@@ -100,7 +101,10 @@ public class LogUtils {
 			}
 			// 保存日志信息
 			log.preInsert();
-//			logDao.insert(log);
+			if("dataSource".equals(MultipleDataSource.getDataSourceKey()))
+			{
+				logDao.insert(log);
+			}
 		}
 	}
 

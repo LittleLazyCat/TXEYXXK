@@ -5,18 +5,31 @@ import java.util.Date;
 public class Heart {
     private int fyxh;//费用序号
     private String fymc;//费用名称
-    private Date sfrq;//收费日期
+    private String sfrq;//收费日期
     private int yldj;//医疗单价
     private int ylsl;//医疗数量
     private int hjje;//合计金额
-    private Date ksrq;//开始日期
-    private Date jsrq;//结束日期
+    private String ksrq;//开始日期
+    private String jsrq;//结束日期
 
 
     public Heart() {
     }
 
-    public Heart(Integer fyxh, String fymc, Date sfrq, Integer yldj, Integer ylsl, Integer hjje) {
+    public Heart(Integer fyxh, String fymc, String sfrq, Integer yldj, Integer ylsl, Integer hjje, String beginDate, String endDate) {
+        this.fyxh = fyxh;
+        this.fymc = fymc;
+        this.sfrq = sfrq;
+        this.yldj = yldj;
+        this.ylsl = ylsl;
+        this.hjje = hjje;
+        this.ksrq = beginDate;
+        this.jsrq = endDate;
+    }
+
+
+
+    public Heart(Integer fyxh, String sfrq,String fymc, Integer yldj, Integer ylsl, Integer hjje) {
         this.fyxh = fyxh;
         this.fymc = fymc;
         this.sfrq = sfrq;
@@ -41,11 +54,11 @@ public class Heart {
         this.fymc = fymc;
     }
 
-    public Date getSfrq() {
+    public String getSfrq() {
         return sfrq;
     }
 
-    public void setSfrq(Date sfrq) {
+    public void setSfrq(String sfrq) {
         this.sfrq = sfrq;
     }
 
@@ -73,20 +86,20 @@ public class Heart {
         this.hjje = hjje;
     }
 
-    public Date getbeginDate() {
+    public String getbeginDate() {
         return ksrq;
     }
 
-    public void setbeginDate(Date ksrq) {
-        this.ksrq = ksrq;
+    public void setbeginDate(String beginDate) {
+        this.ksrq = beginDate;
     }
 
-    public Date getendDate() {
+    public String getendDate() {
         return jsrq;
     }
 
-    public void setendDate(Date jsrq) {
-        this.jsrq = jsrq;
+    public void setendDate(String endDate) {
+        this.jsrq = endDate;
     }
 
     @Override
@@ -98,6 +111,8 @@ public class Heart {
                 ", yldj=" + yldj +
                 ", ylsl=" + ylsl +
                 ", hjje=" + hjje +
+                ", ksrq=" + ksrq +
+                ", jsrq=" + jsrq +
                 '}';
     }
 }
