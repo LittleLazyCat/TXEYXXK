@@ -11,5 +11,5 @@ public class Constants {
 	public static final String TOKEN = "EYQH5y2PyYjblJEkhT2goygrX5b";
 	public static final String SECRET = "mh69QGsbr16lBKYA6Bzijvtn9aecapZoFdlhIwhwyD0";
 	public static final String encodingAESKey = "nETB4PudN3EVIas1IIXzedWbANmUFwg1sqU4VobRCWJ";
-	public static final String webUrl="http://1y761078d9.iok.la/QYTXL";
+	public static final String webUrl="\n" + "http://www.txey.vip/QYTXL";
 }

@@ -1,5 +1,7 @@
 /**
  * Copyright (c) 2005-2012 springside.org.cn
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.common.security;
 
@@ -9,7 +11,7 @@ import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang.Validate;
 
 import com.thinkgem.jeesite.common.utils.Exceptions;
 
@@ -27,16 +29,6 @@ public class Digests {
 
 	private static SecureRandom random = new SecureRandom();
 
-	/**
-	 * 对输入字符串进行md5散列.
-	 */
-	public static byte[] md5(byte[] input) {
-		return digest(input, MD5, null, 1);
-	}
-	public static byte[] md5(byte[] input, int iterations) {
-		return digest(input, MD5, null, iterations);
-	}
-	
 	/**
 	 * 对输入字符串进行sha1散列.
 	 */

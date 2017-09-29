@@ -1,6 +1,11 @@
 package com.kp.qy.util;
 
+import com.txey.qytxl.model.Dept;
+import com.txey.qytxl.service.CoreService;
+import com.txey.qytxl.service.mybatis.DeptService;
 import net.sf.json.JSONObject;
+
+import java.util.List;
 
 /** 
  * @author: py
@@ -16,7 +21,10 @@ public static String SEND_MSG_URL = "https://qyapi.weixin.qq.com/cgi-bin/message
 public static void main(String[] args) {
     //应用ID，账号，部门为""，标签为""，消息类型，内容
     //部门不为""，标签不为""，将会给该部门的每个成员发送消息
-    Send_msg("M028","","","text",Constants.AGENTID,"读万卷书，行万里路，阅人无数");
+    DeptService deptService = new DeptService();
+    List<Dept> deptList = deptService.findDeptByName("xj");
+    String respContent = CoreService.deptMsg(deptList,"xj");
+    Send_msg("M028","","","text",Constants.AGENTID,respContent);
 
 }
   

@@ -1,9 +1,10 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.common.utils.excel.fieldtype;
 
-import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
@@ -19,7 +20,7 @@ public class OfficeType {
 	 */
 	public static Object getValue(String val) {
 		for (Office e : UserUtils.getOfficeList()){
-			if (StringUtils.trimToEmpty(val).equals(e.getName())){
+			if (val.equals(e.getName())){
 				return e;
 			}
 		}

@@ -1,5 +1,7 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.modules.sys.utils;
 
@@ -10,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.thinkgem.jeesite.common.mapper.JsonMapper;
 import com.thinkgem.jeesite.common.utils.CacheUtils;
 import com.thinkgem.jeesite.common.utils.SpringContextHolder;
 import com.thinkgem.jeesite.modules.sys.dao.DictDao;
@@ -37,17 +38,6 @@ public class DictUtils {
 		}
 		return defaultValue;
 	}
-	
-	public static String getDictLabels(String values, String type, String defaultValue){
-		if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(values)){
-			List<String> valueList = Lists.newArrayList();
-			for (String value : StringUtils.split(values, ",")){
-				valueList.add(getDictLabel(value, type, defaultValue));
-			}
-			return StringUtils.join(valueList, ",");
-		}
-		return defaultValue;
-	}
 
 	public static String getDictValue(String label, String type, String defaultLabel){
 		if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(label)){
@@ -63,9 +53,9 @@ public class DictUtils {
 	public static List<Dict> getDictList(String type){
 		@SuppressWarnings("unchecked")
 		Map<String, List<Dict>> dictMap = (Map<String, List<Dict>>)CacheUtils.get(CACHE_DICT_MAP);
-		if (dictMap==null){
+		if (dictMap == null){
 			dictMap = Maps.newHashMap();
-			for (Dict dict : dictDao.findAllList(new Dict())){
+			for (Dict dict : dictDao.findAllList()){
 				List<Dict> dictList = dictMap.get(dict.getType());
 				if (dictList != null){
 					dictList.add(dict);
@@ -75,20 +65,12 @@ public class DictUtils {
 			}
 			CacheUtils.put(CACHE_DICT_MAP, dictMap);
 		}
+		
 		List<Dict> dictList = dictMap.get(type);
 		if (dictList == null){
 			dictList = Lists.newArrayList();
 		}
 		return dictList;
-	}
-	
-	/**
-	 * 返回字典列表（JSON）
-	 * @param type
-	 * @return
-	 */
-	public static String getDictListJson(String type){
-		return JsonMapper.toJsonString(getDictList(type));
 	}
 	
 }

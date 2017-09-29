@@ -41,7 +41,7 @@ public class TemplateController extends BaseController {
     @RequiresPermissions("cms:template:edit")
    	@RequestMapping(value = "form")
    	public String form(String name, Model model) {
-        model.addAttribute("template", fileTplService.getFileTpl(name));
+        model.addAttribute("template", fileTplService.get(name));
    		return "modules/cms/tplForm";
    	}
 

@@ -1,12 +1,9 @@
-/**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
- */
 package com.thinkgem.jeesite.common.filter;
+
+import com.thinkgem.jeesite.common.utils.CacheUtils;
 
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.constructs.web.filter.SimplePageCachingFilter;
-
-import com.thinkgem.jeesite.common.utils.SpringContextHolder;
 
 /**
  * 页面高速缓存过滤器
@@ -15,11 +12,9 @@ import com.thinkgem.jeesite.common.utils.SpringContextHolder;
  */
 public class PageCachingFilter extends SimplePageCachingFilter {
 
-	private CacheManager cacheManager = SpringContextHolder.getBean(CacheManager.class);
-	
 	@Override
 	protected CacheManager getCacheManager() {
-		return cacheManager;
+		return CacheUtils.getCacheManager();
 	}
 	
 }

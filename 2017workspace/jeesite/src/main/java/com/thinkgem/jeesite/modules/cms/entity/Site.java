@@ -1,12 +1,22 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.modules.cms.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
 
-import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.persistence.IdEntity;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
@@ -14,7 +24,11 @@ import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
  * @author ThinkGem
  * @version 2013-05-15
  */
-public class Site extends DataEntity<Site> {
+@Entity
+@Table(name = "cms_site")
+@DynamicInsert @DynamicUpdate
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Site extends IdEntity<Category> {
 	
 	private static final long serialVersionUID = 1L;
 	private String name;	// 站点名称
@@ -25,7 +39,6 @@ public class Site extends DataEntity<Site> {
 	private String theme;	// 主题
 	private String copyright;// 版权信息
 	private String customIndexView;// 自定义首页视图文件
-	private String domain;
 
 	public Site() {
 		super();
@@ -108,6 +121,7 @@ public class Site extends DataEntity<Site> {
 	/**
 	 * 获取默认站点ID
 	 */
+	@Transient
 	public static String defaultSiteId(){
 		return "1";
 	}
@@ -115,6 +129,7 @@ public class Site extends DataEntity<Site> {
 	/**
 	 * 判断是否为默认（主站）站点
 	 */
+	@Transient
 	public static boolean isDefault(String id){
 		return id != null && id.equals(defaultSiteId());
 	}
@@ -122,6 +137,7 @@ public class Site extends DataEntity<Site> {
 	/**
 	 * 获取当前编辑的站点编号
 	 */
+	@Transient
 	public static String getCurrentSiteId(){
 		String siteId = (String)UserUtils.getCache("siteId");
 		return StringUtils.isNotBlank(siteId)?siteId:defaultSiteId();
@@ -137,16 +153,9 @@ public class Site extends DataEntity<Site> {
    	 *
    	 * @return
    	 */
+    @Transient
    	public String getSolutionPath() {
    		return TPL_BASE + "/" + getTheme();
    	}
-
-	public String getDomain() {
-		return domain;
-	}
-
-	public void setDomain(String domain) {
-		this.domain = domain;
-	}
 	
 }

@@ -36,7 +36,7 @@ public class DESUtils {
 	public static void main(String[] args) {
 		String driver="com.mysql.jdbc.Driver";
 		String url="jdbc:mysql://rm-uf6ebto8l74947413.mysql.rds.aliyuncs.com:3306/xxk?useUnicode=true&characterEncoding=utf8";
-		String username = "iwell_txsdermyy";
+		String username = "root";//iwell_txsdermyy
 		String password = "";
 		// System.out.println("username = " + getEncryptString(username));
 		// System.out.println("password = " + getEncryptString(password));

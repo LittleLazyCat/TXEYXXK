@@ -1,11 +1,12 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.common.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,10 +44,8 @@ public class Page<T> {
 	private List<T> list = new ArrayList<T>();
 	
 	private String orderBy = ""; // 标准查询有效， 实例： updatedate desc, name asc
-
-	private String funcName = "page"; // 设置点击页码调用的js函数名称，默认为page，在一页有多个分页对象时使用。
 	
-	private String funcParam = ""; // 函数的附加参数，第三个参数值。
+	private String funcName = "page"; // 设置点击页码调用的js函数名称，默认为page，在一页有多个分页对象时使用。
 	
 	private String message = ""; // 设置提示消息，显示在“共n条”之后
 
@@ -87,24 +86,13 @@ public class Page<T> {
 			CookieUtils.setCookie(response, "pageSize", size);
 			this.setPageSize(Integer.parseInt(size));
 		}else if (request.getParameter("repage")!=null){
-			size = CookieUtils.getCookie(request, "pageSize");
+			no = CookieUtils.getCookie(request, "pageSize");
 			if (StringUtils.isNumeric(size)){
 				this.setPageSize(Integer.parseInt(size));
 			}
 		}else if (defaultPageSize != -2){
 			this.pageSize = defaultPageSize;
 		}
-		// 设置页面分页函数
-        String funcName = request.getParameter("funcName");
-        if (StringUtils.isNotBlank(funcName)){
-            CookieUtils.setCookie(response, "funcName", funcName);
-            this.setFuncName(funcName);
-        }else if (request.getParameter("repage")!=null){
-            funcName = CookieUtils.getCookie(request, "funcName");
-            if (StringUtils.isNotBlank(funcName)){
-                this.setFuncName(funcName);
-            }
-        }
 		// 设置排序参数
 		String orderBy = request.getParameter("orderBy");
 		if (StringUtils.isNotBlank(orderBy)){
@@ -142,7 +130,7 @@ public class Page<T> {
 		this.setCount(count);
 		this.setPageNo(pageNo);
 		this.pageSize = pageSize;
-		this.list = list;
+		this.setList(list);
 	}
 	
 	/**
@@ -203,12 +191,14 @@ public class Page<T> {
 	@Override
 	public String toString() {
 
+		initialize();
+		
 		StringBuilder sb = new StringBuilder();
 		
 		if (pageNo == first) {// 如果是首页
 			sb.append("<li class=\"disabled\"><a href=\"javascript:\">&#171; 上一页</a></li>\n");
 		} else {
-			sb.append("<li><a href=\"javascript:\" onclick=\""+funcName+"("+prev+","+pageSize+",'"+funcParam+"');\">&#171; 上一页</a></li>\n");
+			sb.append("<li><a href=\"javascript:\" onclick=\""+funcName+"("+prev+","+pageSize+");\">&#171; 上一页</a></li>\n");
 		}
 
 		int begin = pageNo - (length / 2);
@@ -230,7 +220,7 @@ public class Page<T> {
 		if (begin > first) {
 			int i = 0;
 			for (i = first; i < first + slider && i < begin; i++) {
-				sb.append("<li><a href=\"javascript:\" onclick=\""+funcName+"("+i+","+pageSize+",'"+funcParam+"');\">"
+				sb.append("<li><a href=\"javascript:\" onclick=\""+funcName+"("+i+","+pageSize+");\">"
 						+ (i + 1 - first) + "</a></li>\n");
 			}
 			if (i < begin) {
@@ -243,7 +233,7 @@ public class Page<T> {
 				sb.append("<li class=\"active\"><a href=\"javascript:\">" + (i + 1 - first)
 						+ "</a></li>\n");
 			} else {
-				sb.append("<li><a href=\"javascript:\" onclick=\""+funcName+"("+i+","+pageSize+",'"+funcParam+"');\">"
+				sb.append("<li><a href=\"javascript:\" onclick=\""+funcName+"("+i+","+pageSize+");\">"
 						+ (i + 1 - first) + "</a></li>\n");
 			}
 		}
@@ -254,23 +244,23 @@ public class Page<T> {
 		}
 
 		for (int i = end + 1; i <= last; i++) {
-			sb.append("<li><a href=\"javascript:\" onclick=\""+funcName+"("+i+","+pageSize+",'"+funcParam+"');\">"
+			sb.append("<li><a href=\"javascript:\" onclick=\""+funcName+"("+i+","+pageSize+");\">"
 					+ (i + 1 - first) + "</a></li>\n");
 		}
 
 		if (pageNo == last) {
 			sb.append("<li class=\"disabled\"><a href=\"javascript:\">下一页 &#187;</a></li>\n");
 		} else {
-			sb.append("<li><a href=\"javascript:\" onclick=\""+funcName+"("+next+","+pageSize+",'"+funcParam+"');\">"
+			sb.append("<li><a href=\"javascript:\" onclick=\""+funcName+"("+next+","+pageSize+");\">"
 					+ "下一页 &#187;</a></li>\n");
 		}
 
 		sb.append("<li class=\"disabled controls\"><a href=\"javascript:\">当前 ");
-		sb.append("<input type=\"text\" value=\""+pageNo+"\" onkeypress=\"var e=window.event||event;var c=e.keyCode||e.which;if(c==13)");
-		sb.append(funcName+"(this.value,"+pageSize+",'"+funcParam+"');\" onclick=\"this.select();\"/> / ");
-		sb.append("<input type=\"text\" value=\""+pageSize+"\" onkeypress=\"var e=window.event||event;var c=e.keyCode||e.which;if(c==13)");
-		sb.append(funcName+"("+pageNo+",this.value,'"+funcParam+"');\" onclick=\"this.select();\"/> 条，");
-		sb.append("共 " + count + " 条"+(message!=null?message:"")+"</a></li>\n");
+		sb.append("<input type=\"text\" value=\""+pageNo+"\" onkeypress=\"var e=window.event||this;var c=e.keyCode||e.which;if(c==13)");
+		sb.append(funcName+"(this.value,"+pageSize+");\" onclick=\"this.select();\"/> / ");
+		sb.append("<input type=\"text\" value=\""+pageSize+"\" onkeypress=\"var e=window.event||this;var c=e.keyCode||e.which;if(c==13)");
+		sb.append(funcName+"("+pageNo+",this.value);\" onclick=\"this.select();\"/> 条，");
+		sb.append("共 " + count + " 条"+(message!=null?message:"")+"</a><li>\n");
 
 		sb.insert(0,"<ul>\n").append("</ul>\n");
 		
@@ -434,7 +424,6 @@ public class Page<T> {
 	 */
 	public Page<T> setList(List<T> list) {
 		this.list = list;
-		initialize();
 		return this;
 	}
 
@@ -444,13 +433,6 @@ public class Page<T> {
 	 */
 	@JsonIgnore
 	public String getOrderBy() {
-		// SQL过滤，防止注入 
-		String reg = "(?:')|(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|"
-					+ "(\\b(select|update|and|or|delete|insert|trancate|char|into|substr|ascii|declare|exec|count|master|into|drop|execute)\\b)";
-		Pattern sqlPattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
-		if (sqlPattern.matcher(orderBy).find()) {
-			return "";
-		}
 		return orderBy;
 	}
 
@@ -477,23 +459,6 @@ public class Page<T> {
 	 */
 	public void setFuncName(String funcName) {
 		this.funcName = funcName;
-	}
-
-	/**
-	 * 获取分页函数的附加参数
-	 * @return
-	 */
-	@JsonIgnore
-	public String getFuncParam() {
-		return funcParam;
-	}
-
-	/**
-	 * 设置分页函数的附加参数
-	 * @return
-	 */
-	public void setFuncParam(String funcParam) {
-		this.funcParam = funcParam;
 	}
 
 	/**
@@ -531,6 +496,14 @@ public class Page<T> {
 			firstResult = 0;
 		}
 		return firstResult;
+	}
+	
+	public int getLastResult(){
+		int lastResult = getFirstResult()+getMaxResults();
+		if(lastResult>getCount()) {
+			lastResult =(int) getCount();
+		}
+		return lastResult;
 	}
 	/**
 	 * 获取 Hibernate MaxResults

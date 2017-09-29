@@ -1,5 +1,7 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.modules.cms.web;
 
@@ -48,7 +50,7 @@ public class SiteController extends BaseController {
 	@RequiresPermissions("cms:site:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(Site site, HttpServletRequest request, HttpServletResponse response, Model model) {
-        Page<Site> page = siteService.findPage(new Page<Site>(request, response), site); 
+        Page<Site> page = siteService.find(new Page<Site>(request, response), site); 
         model.addAttribute("page", page);
 		return "modules/cms/siteList";
 	}
@@ -65,30 +67,30 @@ public class SiteController extends BaseController {
 	public String save(Site site, Model model, RedirectAttributes redirectAttributes) {
 		if(Global.isDemoMode()){
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
-			return "redirect:" + adminPath + "/cms/site/?repage";
+			return "redirect:"+Global.getAdminPath()+"/cms/site/?repage";
 		}
 		if (!beanValidator(model, site)){
 			return form(site, model);
 		}
 		siteService.save(site);
 		addMessage(redirectAttributes, "保存站点'" + site.getName() + "'成功");
-		return "redirect:" + adminPath + "/cms/site/?repage";
+		return "redirect:"+Global.getAdminPath()+"/cms/site/?repage";
 	}
 	
 	@RequiresPermissions("cms:site:edit")
 	@RequestMapping(value = "delete")
-	public String delete(Site site, @RequestParam(required=false) Boolean isRe, RedirectAttributes redirectAttributes) {
+	public String delete(String id, @RequestParam(required=false) Boolean isRe, RedirectAttributes redirectAttributes) {
 		if(Global.isDemoMode()){
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
-			return "redirect:" + adminPath + "/cms/site/?repage";
+			return "redirect:"+Global.getAdminPath()+"/cms/site/?repage";
 		}
-		if (Site.isDefault(site.getId())){
+		if (Site.isDefault(id)){
 			addMessage(redirectAttributes, "删除站点失败, 不允许删除默认站点");
 		}else{
-			siteService.delete(site, isRe);
+			siteService.delete(id, isRe);
 			addMessage(redirectAttributes, (isRe!=null&&isRe?"恢复":"")+"删除站点成功");
 		}
-		return "redirect:" + adminPath + "/cms/site/?repage";
+		return "redirect:"+Global.getAdminPath()+"/cms/site/?repage";
 	}
 	
 	/**
@@ -105,7 +107,7 @@ public class SiteController extends BaseController {
 			CookieUtils.setCookie(response, "siteId", id);
 		}
 		if (flag){
-			return "redirect:" + adminPath;
+			return "redirect:"+Global.getAdminPath();
 		}
 		return "modules/cms/siteSelect";
 	}

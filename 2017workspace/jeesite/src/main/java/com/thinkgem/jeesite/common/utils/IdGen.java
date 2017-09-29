@@ -1,5 +1,7 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.common.utils;
 
@@ -63,10 +65,7 @@ public class IdGen implements IdGenerator, SessionIdGenerator {
 	public static void main(String[] args) {
 		System.out.println(IdGen.uuid());
 		System.out.println(IdGen.uuid().length());
-		System.out.println(new IdGen().getNextId());
-		for (int i=0; i<1000; i++){
-			System.out.println(IdGen.randomLong() + "  " + IdGen.randomBase62(5));
-		}
+		System.out.println(new com.thinkgem.jeesite.common.utils.IdGen().getNextId());
 	}
 
 }

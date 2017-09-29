@@ -32,7 +32,7 @@ public class CoreService {
     public static String reqContent;
 
 
-    public static void processRequest(String msg, EmployeeService employeeService, DeptService deptService, HttpServletRequest request,
+    public static void processRequest(String msg, EmployeeService employeeService, DeptService deptService, final HttpServletRequest request,
                                       HttpServletResponse response, WXBizMsgCrypt wxcpt, String timestamp, String nonce) {
         String respMessage = null;
         //员工列表
@@ -81,6 +81,7 @@ public class CoreService {
                     employeeList = employeeService.findEmpByName(content);
                     deptList = deptService.findDeptByName(content);
                     reqDeptList = deptList;
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -110,15 +111,23 @@ public class CoreService {
                         public void run() {
                             System.out.println("开始执行线程。。。");
                             System.out.println("进入等待状态。。。");
-
                             synchronized (this) {
                                 try {
-                                    this.wait(1000);
+                                    this.wait(2000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
                             }
-                            SendMessage.Send_msg(reqUser, "", "", MessageUtil.RESP_MESSAGE_TYPE_TEXT, Constants.AGENTID, CoreService.deptMsg(reqDeptList, reqContent));
+                            try {
+                                SendMessage.Send_msg(reqUser, "", "", MessageUtil.RESP_MESSAGE_TYPE_TEXT, Constants.AGENTID, CoreService.deptMsg(reqDeptList, reqContent));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+
+                            }
+                            finally {
+                                SendMessage.Send_msg(reqUser, "", "", MessageUtil.RESP_MESSAGE_TYPE_TEXT, Constants.AGENTID, "请输入汉字进一步查询！");
+                            }
+
                             System.out.println("线程结束。。。");
                         }
                     });
@@ -144,8 +153,8 @@ public class CoreService {
                         System.out.println(respContent);
                     }
                 }
-                if(eventType.equalsIgnoreCase(MessageUtil.EVENT_TYPE_VIEW)){
-                    respContent="";
+                if (eventType.equalsIgnoreCase(MessageUtil.EVENT_TYPE_VIEW)) {
+                    respContent = "";
                 }
             }
 

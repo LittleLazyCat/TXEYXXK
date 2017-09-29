@@ -1,12 +1,16 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.modules.cms.dao;
 
 import java.util.List;
 
-import com.thinkgem.jeesite.common.persistence.CrudDao;
-import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
+import org.springframework.stereotype.Repository;
+
+import com.thinkgem.jeesite.common.persistence.BaseDao;
+import com.thinkgem.jeesite.common.persistence.Parameter;
 import com.thinkgem.jeesite.modules.cms.entity.Link;
 
 /**
@@ -14,17 +18,14 @@ import com.thinkgem.jeesite.modules.cms.entity.Link;
  * @author ThinkGem
  * @version 2013-8-23
  */
-@MyBatisDao
-public interface LinkDao extends CrudDao<Link> {
+@Repository
+public class LinkDao extends BaseDao<Link> {
 	
-	public List<Link> findByIdIn(String[] ids);
-//	{
-//		return find("front Like where id in (:p1)", new Parameter(new Object[]{ids}));
-//	}
+	public List<Link> findByIdIn(Long[] ids){
+		return find("front Like where id in (:p1)", new Parameter(new Object[]{ids}));
+	}
 	
-	public int updateExpiredWeight(Link link);
-//	{
-//		return update("update Link set weight=0 where weight > 0 and weightDate < current_timestamp()");
-//	}
-//	public List<Link> fjindListByEntity();
+	public int updateExpiredWeight(){
+		return update("update Link set weight=0 where weight > 0 and weightDate < current_timestamp()");
+	}
 }

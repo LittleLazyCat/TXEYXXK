@@ -1,39 +1,54 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.modules.sys.entity;
 
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Length;
 
 import com.google.common.collect.Lists;
-import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.persistence.IdEntity;
 
 /**
  * 角色Entity
  * @author ThinkGem
- * @version 2013-12-05
+ * @version 2013-05-15
  */
-public class Role extends DataEntity<Role> {
+@Entity
+@Table(name = "sys_role")
+@DynamicInsert @DynamicUpdate
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Role extends IdEntity<Role> {
 	
 	private static final long serialVersionUID = 1L;
 	private Office office;	// 归属机构
 	private String name; 	// 角色名称
-	private String enname;	// 英文名称
-	private String roleType;// 权限类型
-	private String dataScope;// 数据范围
-	
-	private String oldName; 	// 原角色名称
-	private String oldEnname;	// 原英文名称
-	private String sysData; 		//是否是系统数据
-	private String useable; 		//是否是可用
-	
-	private User user;		// 根据用户ID查询角色列表
+	private String dataScope; // 数据范围
 
-//	private List<User> userList = Lists.newArrayList(); // 拥有用户列表
+	private List<User> userList = Lists.newArrayList(); // 拥有用户列表
 	private List<Menu> menuList = Lists.newArrayList(); // 拥有菜单列表
 	private List<Office> officeList = Lists.newArrayList(); // 按明细设置数据范围
 
@@ -48,35 +63,18 @@ public class Role extends DataEntity<Role> {
 	
 	public Role() {
 		super();
-		this.dataScope = DATA_SCOPE_SELF;
-		this.useable=Global.YES;
+		this.dataScope = DATA_SCOPE_CUSTOM;
 	}
-	
-	public Role(String id){
-		super(id);
-	}
-	
-	public Role(User user) {
+
+	public Role(String id, String name) {
 		this();
-		this.user = user;
+		this.id = id;
+		this.name = name;
 	}
-
-	public String getUseable() {
-		return useable;
-	}
-
-	public void setUseable(String useable) {
-		this.useable = useable;
-	}
-
-	public String getSysData() {
-		return sysData;
-	}
-
-	public void setSysData(String sysData) {
-		this.sysData = sysData;
-	}
-
+	
+	@ManyToOne
+	@JoinColumn(name="office_id")
+	@NotFound(action = NotFoundAction.IGNORE)
 	public Office getOffice() {
 		return office;
 	}
@@ -94,24 +92,6 @@ public class Role extends DataEntity<Role> {
 		this.name = name;
 	}
 
-	@Length(min=1, max=100)
-	public String getEnname() {
-		return enname;
-	}
-
-	public void setEnname(String enname) {
-		this.enname = enname;
-	}
-	
-	@Length(min=1, max=100)
-	public String getRoleType() {
-		return roleType;
-	}
-
-	public void setRoleType(String roleType) {
-		this.roleType = roleType;
-	}
-
 	public String getDataScope() {
 		return dataScope;
 	}
@@ -120,42 +100,43 @@ public class Role extends DataEntity<Role> {
 		this.dataScope = dataScope;
 	}
 
-	public String getOldName() {
-		return oldName;
+	@ManyToMany(mappedBy = "roleList", fetch=FetchType.LAZY)
+	@Where(clause="del_flag='"+DEL_FLAG_NORMAL+"'")
+	@OrderBy("id") @Fetch(FetchMode.SUBSELECT)
+	@NotFound(action = NotFoundAction.IGNORE)
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	public List<User> getUserList() {
+		return userList;
 	}
 
-	public void setOldName(String oldName) {
-		this.oldName = oldName;
+	public void setUserList(List<User> userList) {
+		this.userList = userList;
+	}
+	
+	@Transient
+	public List<String> getUserIdList() {
+		List<String> nameIdList = Lists.newArrayList();
+		for (User user : userList) {
+			nameIdList.add(user.getId());
+		}
+		return nameIdList;
 	}
 
-	public String getOldEnname() {
-		return oldEnname;
+	@Transient
+	public String getUserIds() {
+		List<String> nameIdList = Lists.newArrayList();
+		for (User user : userList) {
+			nameIdList.add(user.getId());
+		}
+		return StringUtils.join(nameIdList, ",");
 	}
 
-	public void setOldEnname(String oldEnname) {
-		this.oldEnname = oldEnname;
-	}
-
-//	public List<User> getUserList() {
-//		return userList;
-//	}
-//
-//	public void setUserList(List<User> userList) {
-//		this.userList = userList;
-//	}
-//	
-//	public List<String> getUserIdList() {
-//		List<String> nameIdList = Lists.newArrayList();
-//		for (User user : userList) {
-//			nameIdList.add(user.getId());
-//		}
-//		return nameIdList;
-//	}
-//
-//	public String getUserIds() {
-//		return StringUtils.join(getUserIdList(), ",");
-//	}
-
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "sys_role_menu", joinColumns = { @JoinColumn(name = "role_id") }, inverseJoinColumns = { @JoinColumn(name = "menu_id") })
+	@Where(clause="del_flag='"+DEL_FLAG_NORMAL+"'")
+	@OrderBy("id") @Fetch(FetchMode.SUBSELECT)
+	@NotFound(action = NotFoundAction.IGNORE)
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public List<Menu> getMenuList() {
 		return menuList;
 	}
@@ -164,6 +145,7 @@ public class Role extends DataEntity<Role> {
 		this.menuList = menuList;
 	}
 
+	@Transient
 	public List<String> getMenuIdList() {
 		List<String> menuIdList = Lists.newArrayList();
 		for (Menu menu : menuList) {
@@ -172,6 +154,7 @@ public class Role extends DataEntity<Role> {
 		return menuIdList;
 	}
 
+	@Transient
 	public void setMenuIdList(List<String> menuIdList) {
 		menuList = Lists.newArrayList();
 		for (String menuId : menuIdList) {
@@ -181,18 +164,34 @@ public class Role extends DataEntity<Role> {
 		}
 	}
 
+	@Transient
 	public String getMenuIds() {
-		return StringUtils.join(getMenuIdList(), ",");
+		List<String> nameIdList = Lists.newArrayList();
+		for (Menu menu : menuList) {
+			nameIdList.add(menu.getId());
+		}
+		return StringUtils.join(nameIdList, ",");
 	}
 	
+	@Transient
 	public void setMenuIds(String menuIds) {
 		menuList = Lists.newArrayList();
 		if (menuIds != null){
 			String[] ids = StringUtils.split(menuIds, ",");
-			setMenuIdList(Lists.newArrayList(ids));
+			for (String menuId : ids) {
+				Menu menu = new Menu();
+				menu.setId(menuId);
+				menuList.add(menu);
+			}
 		}
 	}
 	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "sys_role_office", joinColumns = { @JoinColumn(name = "role_id") }, inverseJoinColumns = { @JoinColumn(name = "office_id") })
+	@Where(clause="del_flag='"+DEL_FLAG_NORMAL+"'")
+	@OrderBy("id") @Fetch(FetchMode.SUBSELECT)
+	@NotFound(action = NotFoundAction.IGNORE)
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public List<Office> getOfficeList() {
 		return officeList;
 	}
@@ -201,6 +200,8 @@ public class Role extends DataEntity<Role> {
 		this.officeList = officeList;
 	}
 
+
+	@Transient
 	public List<String> getOfficeIdList() {
 		List<String> officeIdList = Lists.newArrayList();
 		for (Office office : officeList) {
@@ -209,6 +210,7 @@ public class Role extends DataEntity<Role> {
 		return officeIdList;
 	}
 
+	@Transient
 	public void setOfficeIdList(List<String> officeIdList) {
 		officeList = Lists.newArrayList();
 		for (String officeId : officeIdList) {
@@ -218,21 +220,44 @@ public class Role extends DataEntity<Role> {
 		}
 	}
 
+	@Transient
 	public String getOfficeIds() {
-		return StringUtils.join(getOfficeIdList(), ",");
+		List<String> nameIdList = Lists.newArrayList();
+		for (Office office : officeList) {
+			nameIdList.add(office.getId());
+		}
+		return StringUtils.join(nameIdList, ",");
 	}
 	
+	@Transient
 	public void setOfficeIds(String officeIds) {
 		officeList = Lists.newArrayList();
 		if (officeIds != null){
 			String[] ids = StringUtils.split(officeIds, ",");
-			setOfficeIdList(Lists.newArrayList(ids));
+			for (String officeId : ids) {
+				Office office = new Office();
+				office.setId(officeId);
+				officeList.add(office);
+			}
 		}
 	}
+	
+//	@ElementCollection
+//	@CollectionTable(name = "sys_user_role", joinColumns = { @JoinColumn(name = "role_id") })
+//	@Column(name = "user_id")
+//	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//	public List<Long> getUserIdList() {
+//		return userIdList;
+//	}
+//
+//	public void setUserIdList(List<Long> userIdList) {
+//		this.userIdList = userIdList;
+//	}
 	
 	/**
 	 * 获取权限字符串列表
 	 */
+	@Transient
 	public List<String> getPermissions() {
 		List<String> permissions = Lists.newArrayList();
 		for (Menu menu : menuList) {
@@ -243,21 +268,15 @@ public class Role extends DataEntity<Role> {
 		return permissions;
 	}
 
-	public User getUser() {
-		return user;
+	@Transient
+	public boolean isAdmin(){
+		return isAdmin(this.id);
 	}
-
-	public void setUser(User user) {
-		this.user = user;
+	
+	@Transient
+	public static boolean isAdmin(String id){
+		return id != null && id.equals("1");
 	}
-
-//	public boolean isAdmin(){
-//		return isAdmin(this.id);
-//	}
-//	
-//	public static boolean isAdmin(String id){
-//		return id != null && "1".equals(id);
-//	}
 	
 //	@Transient
 //	public String getMenuNames() {

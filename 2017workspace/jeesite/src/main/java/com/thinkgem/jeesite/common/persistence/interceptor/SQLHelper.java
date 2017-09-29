@@ -1,5 +1,7 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.common.persistence.interceptor;
 
@@ -17,10 +19,8 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
-import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.persistence.dialect.Dialect;
-import com.thinkgem.jeesite.common.utils.Reflections;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 
 import java.sql.Connection;
@@ -101,14 +101,8 @@ public class SQLHelper {
     public static int getCount(final String sql, final Connection connection,
     							final MappedStatement mappedStatement, final Object parameterObject,
     							final BoundSql boundSql, Log log) throws SQLException {
-    	String dbName = Global.getConfig("jdbc.type");
-		final String countSql;
-		if("oracle".equals(dbName)){
-			countSql = "select count(1) from (" + sql + ") tmp_count";
-		}else{
-			countSql = "select count(1) from (" + removeOrders(sql) + ") tmp_count";
-//	        countSql = "select count(1) " + removeSelect(removeOrders(sql));
-		}
+        final String countSql = "select count(1) from (" + sql + ") tmp_count";
+//        final String countSql = "select count(1) " + removeSelect(removeOrders(sql));
         Connection conn = connection;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -122,12 +116,6 @@ public class SQLHelper {
         	ps = conn.prepareStatement(countSql);
             BoundSql countBS = new BoundSql(mappedStatement.getConfiguration(), countSql,
                     boundSql.getParameterMappings(), parameterObject);
-            //解决MyBatis 分页foreach 参数失效 start
-			if (Reflections.getFieldValue(boundSql, "metaParameters") != null) {
-				MetaObject mo = (MetaObject) Reflections.getFieldValue(boundSql, "metaParameters");
-				Reflections.setFieldValue(countBS, "metaParameters", mo);
-			}
-			//解决MyBatis 分页foreach 参数失效 end 
             SQLHelper.setParameters(ps, mappedStatement, countBS, parameterObject);
             rs = ps.executeQuery();
             int count = 0;
@@ -166,7 +154,7 @@ public class SQLHelper {
     
     /** 
      * 去除qlString的select子句。 
-     * @param hql 
+     * @param qlString
      * @return 
      */  
     @SuppressWarnings("unused")
@@ -177,7 +165,7 @@ public class SQLHelper {
       
     /** 
      * 去除hql的orderBy子句。 
-     * @param hql 
+     * @param qlString
      * @return 
      */  
     @SuppressWarnings("unused")

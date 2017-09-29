@@ -1,5 +1,7 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.modules.sys.web;
 
@@ -9,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +28,6 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.sys.entity.Menu;
 import com.thinkgem.jeesite.modules.sys.service.SystemService;
-import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * 菜单Controller
@@ -53,7 +55,7 @@ public class MenuController extends BaseController {
 	public String list(Model model) {
 		List<Menu> list = Lists.newArrayList();
 		List<Menu> sourcelist = systemService.findAllMenu();
-		Menu.sortList(list, sourcelist, Menu.getRootId(), true);
+		Menu.sortList(list, sourcelist, "1");
         model.addAttribute("list", list);
 		return "modules/sys/menuList";
 	}
@@ -62,18 +64,9 @@ public class MenuController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Menu menu, Model model) {
 		if (menu.getParent()==null||menu.getParent().getId()==null){
-			menu.setParent(new Menu(Menu.getRootId()));
+			menu.setParent(new Menu("1"));
 		}
 		menu.setParent(systemService.getMenu(menu.getParent().getId()));
-		// 获取排序号，最末节点排序号+30
-		if (StringUtils.isBlank(menu.getId())){
-			List<Menu> list = Lists.newArrayList();
-			List<Menu> sourcelist = systemService.findAllMenu();
-			Menu.sortList(list, sourcelist, menu.getParentId(), false);
-			if (list.size() > 0){
-				menu.setSort(list.get(list.size()-1).getSort() + 30);
-			}
-		}
 		model.addAttribute("menu", menu);
 		return "modules/sys/menuForm";
 	}
@@ -81,50 +74,55 @@ public class MenuController extends BaseController {
 	@RequiresPermissions("sys:menu:edit")
 	@RequestMapping(value = "save")
 	public String save(Menu menu, Model model, RedirectAttributes redirectAttributes) {
-		if(!UserUtils.getUser().isAdmin()){
-			addMessage(redirectAttributes, "越权操作，只有超级管理员才能添加或修改数据！");
-			return "redirect:" + adminPath + "/sys/role/?repage";
-		}
 		if(Global.isDemoMode()){
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
-			return "redirect:" + adminPath + "/sys/menu/";
+			return "redirect:"+Global.getAdminPath()+"/sys/menu/";
 		}
 		if (!beanValidator(model, menu)){
 			return form(menu, model);
 		}
 		systemService.saveMenu(menu);
 		addMessage(redirectAttributes, "保存菜单'" + menu.getName() + "'成功");
-		return "redirect:" + adminPath + "/sys/menu/";
+		return "redirect:"+Global.getAdminPath()+"/sys/menu/";
 	}
 	
 	@RequiresPermissions("sys:menu:edit")
 	@RequestMapping(value = "delete")
-	public String delete(Menu menu, RedirectAttributes redirectAttributes) {
+	public String delete(String id, RedirectAttributes redirectAttributes) {
 		if(Global.isDemoMode()){
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
-			return "redirect:" + adminPath + "/sys/menu/";
+			return "redirect:"+Global.getAdminPath()+"/sys/menu/";
 		}
-//		if (Menu.isRoot(id)){
-//			addMessage(redirectAttributes, "删除菜单失败, 不允许删除顶级菜单或编号为空");
-//		}else{
-			systemService.deleteMenu(menu);
+		if (Menu.isRoot(id)){
+			addMessage(redirectAttributes, "删除菜单失败, 不允许删除顶级菜单或编号为空");
+		}else{
+			systemService.deleteMenu(id);
 			addMessage(redirectAttributes, "删除菜单成功");
-//		}
-		return "redirect:" + adminPath + "/sys/menu/";
+		}
+		return "redirect:"+Global.getAdminPath()+"/sys/menu/";
 	}
 
-	@RequiresPermissions("user")
+	@RequiresUser
 	@RequestMapping(value = "tree")
 	public String tree() {
 		return "modules/sys/menuTree";
 	}
-
-	@RequiresPermissions("user")
-	@RequestMapping(value = "treeselect")
-	public String treeselect(String parentId, Model model) {
-		model.addAttribute("parentId", parentId);
-		return "modules/sys/menuTreeselect";
+	
+	/**
+	 * 同步工作流权限数据
+	 */
+	@RequiresPermissions("sys:menu:edit")
+	@RequestMapping(value = "synToActiviti")
+	public String synToActiviti(RedirectAttributes redirectAttributes) {
+		if(Global.isDemoMode()){
+			addMessage(redirectAttributes, "演示模式，不允许操作！");
+			return "redirect:"+Global.getAdminPath()+"/sys/menu/";
+		}
+		systemService.synToActiviti();
+    	addMessage(redirectAttributes, "同步工作流权限数据成功!");
+		return "redirect:"+Global.getAdminPath()+"/sys/menu/";
 	}
+	
 	
 	/**
 	 * 批量修改菜单排序
@@ -134,39 +132,32 @@ public class MenuController extends BaseController {
 	public String updateSort(String[] ids, Integer[] sorts, RedirectAttributes redirectAttributes) {
 		if(Global.isDemoMode()){
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
-			return "redirect:" + adminPath + "/sys/menu/";
+			return "redirect:"+Global.getAdminPath()+"/sys/menu/";
 		}
-    	for (int i = 0; i < ids.length; i++) {
-    		Menu menu = new Menu(ids[i]);
-    		menu.setSort(sorts[i]);
-    		systemService.updateMenuSort(menu);
+    	int len = ids.length;
+    	Menu[] menus = new Menu[len];
+    	for (int i = 0; i < len; i++) {
+    		menus[i] = systemService.getMenu(ids[i]);
+    		menus[i].setSort(sorts[i]);
+    		systemService.saveMenu(menus[i]);
     	}
     	addMessage(redirectAttributes, "保存菜单排序成功!");
-		return "redirect:" + adminPath + "/sys/menu/";
+		return "redirect:"+Global.getAdminPath()+"/sys/menu/";
 	}
 	
-	/**
-	 * isShowHide是否显示隐藏菜单
-	 * @param extId
-	 * @param isShowHidden
-	 * @param response
-	 * @return
-	 */
-	@RequiresPermissions("user")
+	@RequiresUser
 	@ResponseBody
 	@RequestMapping(value = "treeData")
-	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId,@RequestParam(required=false) String isShowHide, HttpServletResponse response) {
+	public List<Map<String, Object>> treeData(@RequestParam(required=false) Long extId, HttpServletResponse response) {
+		response.setContentType("application/json; charset=UTF-8");
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		List<Menu> list = systemService.findAllMenu();
 		for (int i=0; i<list.size(); i++){
 			Menu e = list.get(i);
-			if (StringUtils.isBlank(extId) || (extId!=null && !extId.equals(e.getId()) && e.getParentIds().indexOf(","+extId+",")==-1)){
-				if(isShowHide != null && isShowHide.equals("0") && e.getIsShow().equals("0")){
-					continue;
-				}
+			if (extId == null || (extId!=null && !extId.equals(e.getId()) && e.getParentIds().indexOf(","+extId+",")==-1)){
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("id", e.getId());
-				map.put("pId", e.getParentId());
+				map.put("pId", e.getParent()!=null?e.getParent().getId():0);
 				map.put("name", e.getName());
 				mapList.add(map);
 			}

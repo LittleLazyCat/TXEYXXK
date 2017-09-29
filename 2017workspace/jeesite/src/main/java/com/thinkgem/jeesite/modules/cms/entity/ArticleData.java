@@ -1,20 +1,40 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.modules.cms.entity;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Store;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.persistence.BaseEntity;
 
 /**
  * 文章Entity
  * @author ThinkGem
  * @version 2013-01-15
  */
-public class ArticleData extends DataEntity<ArticleData> {
+@Entity
+@Table(name = "cms_article_data")
+@DynamicInsert @DynamicUpdate
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class ArticleData extends BaseEntity<ArticleData> {
 
 	private static final long serialVersionUID = 1L;
 	private String id;		// 编号
@@ -27,7 +47,7 @@ public class ArticleData extends DataEntity<ArticleData> {
 	
 	public ArticleData() {
 		super();
-		this.allowComment = Global.YES;
+		this.allowComment = YES;
 	}
 	
 	public ArticleData(String id){
@@ -35,6 +55,7 @@ public class ArticleData extends DataEntity<ArticleData> {
 		this.id = id;
 	}
 
+	@Id
 	public String getId() {
 		return id;
 	}
@@ -44,6 +65,7 @@ public class ArticleData extends DataEntity<ArticleData> {
 	}
 
 	@NotBlank
+	@Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
 	public String getContent() {
 		return content;
 	}
@@ -79,6 +101,9 @@ public class ArticleData extends DataEntity<ArticleData> {
 		this.allowComment = allowComment;
 	}
 
+	@OneToOne(cascade={CascadeType.PERSIST,CascadeType.MERGE},optional=false)  
+//	@OneToOne(mappedBy="articleData",cascade=CascadeType.ALL)
+	@PrimaryKeyJoinColumn
 	public Article getArticle() {
 		return article;
 	}

@@ -23,6 +23,6 @@
 	resultType="com.txey.qytxl.model.Dept">
 		SELECT
 		ksid,ksmc,ksmcpy,kslxid,yddh,dxdh,ksbz
-		FROM tb_emp_dept WHERE ksmc LIKE #{Name} OR ksmcpy LIKE #{Name}
+		FROM tb_emp_dept WHERE ksmc LIKE #{Name} OR LOWER(ksmcpy) LIKE #{Name}
 	</select>
 </mapper>

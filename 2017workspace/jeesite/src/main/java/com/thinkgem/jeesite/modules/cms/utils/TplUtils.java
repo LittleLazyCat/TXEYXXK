@@ -1,6 +1,6 @@
 package com.thinkgem.jeesite.modules.cms.utils;
 
-import com.thinkgem.jeesite.common.utils.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,16 +1,39 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.modules.cms.entity;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.DateBridge;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Resolution;
+import org.hibernate.search.annotations.Store;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
-import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.persistence.BaseEntity;
 import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 
@@ -19,9 +42,15 @@ import com.thinkgem.jeesite.modules.sys.entity.User;
  * @author ThinkGem
  * @version 2013-05-15
  */
-public class Guestbook extends DataEntity<Guestbook> {
+@Entity
+@Table(name = "cms_guestbook")
+@DynamicInsert @DynamicUpdate
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Indexed @Analyzer(impl = IKAnalyzer.class)
+public class Guestbook extends BaseEntity<Category> {
 	
 	private static final long serialVersionUID = 1L;
+	private String id; 		// 编号
 	private String type; 	// 留言分类（咨询、建议、投诉、其它）
 	private String content; // 留言内容
 	private String name; 	// 姓名
@@ -44,12 +73,23 @@ public class Guestbook extends DataEntity<Guestbook> {
 		this.id = id;
 	}
 	
+	@PrePersist
 	public void prePersist(){
 		this.id = IdGen.uuid();
 		this.createDate = new Date();
 	}
 	
+	@Id
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	@Length(min=1, max=100)
+	@Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO)
 	public String getType() {
 		return type;
 	}
@@ -59,6 +99,7 @@ public class Guestbook extends DataEntity<Guestbook> {
 	}
 
 	@Length(min=1, max=2000)
+	@Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
 	public String getContent() {
 		return content;
 	}
@@ -68,6 +109,7 @@ public class Guestbook extends DataEntity<Guestbook> {
 	}
 	
 	@Length(min=1, max=100)
+	@Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
 	public String getName() {
 		return name;
 	}
@@ -113,6 +155,8 @@ public class Guestbook extends DataEntity<Guestbook> {
 	}
 
 	@NotNull
+	@Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO)
+	@DateBridge(resolution = Resolution.DAY)
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -121,6 +165,9 @@ public class Guestbook extends DataEntity<Guestbook> {
 		this.createDate = createDate;
 	}
 
+	@ManyToOne
+	@JoinColumn(name="re_user_id")
+	@NotFound(action = NotFoundAction.IGNORE)
 	public User getReUser() {
 		return reUser;
 	}
@@ -129,6 +176,7 @@ public class Guestbook extends DataEntity<Guestbook> {
 		this.reUser = reUser;
 	}
 
+	@Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
 	public String getReContent() {
 		return reContent;
 	}
@@ -146,6 +194,7 @@ public class Guestbook extends DataEntity<Guestbook> {
 	}
 
 	@Length(min=1, max=1)
+	@Field(index=Index.YES, analyze=Analyze.NO, store=Store.YES)
 	public String getDelFlag() {
 		return delFlag;
 	}

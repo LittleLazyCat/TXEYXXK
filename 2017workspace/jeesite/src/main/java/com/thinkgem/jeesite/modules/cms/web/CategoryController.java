@@ -1,5 +1,7 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.modules.cms.web;
 
@@ -73,10 +75,9 @@ public class CategoryController extends BaseController {
 		if (category.getParent()==null||category.getParent().getId()==null){
 			category.setParent(new Category("1"));
 		}
-		Category parent = categoryService.get(category.getParent().getId());
-		category.setParent(parent);
+		category.setParent(categoryService.get(category.getParent().getId()));
 		if (category.getOffice()==null||category.getOffice().getId()==null){
-			category.setOffice(parent.getOffice());
+			category.setOffice(category.getParent().getOffice());
 		}
         model.addAttribute("listViewList",getTplContent(Category.DEFAULT_TEMPLATE));
         model.addAttribute("category_DEFAULT_TEMPLATE",Category.DEFAULT_TEMPLATE);
@@ -92,30 +93,30 @@ public class CategoryController extends BaseController {
 	public String save(Category category, Model model, RedirectAttributes redirectAttributes) {
 		if(Global.isDemoMode()){
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
-			return "redirect:" + adminPath + "/cms/category/";
+			return "redirect:"+Global.getAdminPath()+"/cms/category/";
 		}
 		if (!beanValidator(model, category)){
 			return form(category, model);
 		}
 		categoryService.save(category);
 		addMessage(redirectAttributes, "保存栏目'" + category.getName() + "'成功");
-		return "redirect:" + adminPath + "/cms/category/";
+		return "redirect:"+Global.getAdminPath()+"/cms/category/";
 	}
 	
 	@RequiresPermissions("cms:category:edit")
 	@RequestMapping(value = "delete")
-	public String delete(Category category, RedirectAttributes redirectAttributes) {
+	public String delete(String id, RedirectAttributes redirectAttributes) {
 		if(Global.isDemoMode()){
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
-			return "redirect:" + adminPath + "/cms/category/";
+			return "redirect:"+Global.getAdminPath()+"/cms/category/";
 		}
-		if (Category.isRoot(category.getId())){
+		if (Category.isRoot(id)){
 			addMessage(redirectAttributes, "删除栏目失败, 不允许删除顶级栏目或编号为空");
 		}else{
-			categoryService.delete(category);
+			categoryService.delete(id);
 			addMessage(redirectAttributes, "删除栏目成功");
 		}
-		return "redirect:" + adminPath + "/cms/category/";
+		return "redirect:"+Global.getAdminPath()+"/cms/category/";
 	}
 
 	/**
@@ -132,13 +133,13 @@ public class CategoryController extends BaseController {
     		categoryService.save(entitys[i]);
     	}
     	addMessage(redirectAttributes, "保存栏目排序成功!");
-		return "redirect:" + adminPath + "/cms/category/";
+		return "redirect:"+Global.getAdminPath()+"/cms/category/";
 	}
 	
 	@RequiresUser
 	@ResponseBody
 	@RequestMapping(value = "treeData")
-	public List<Map<String, Object>> treeData(String module, @RequestParam(required=false) String extId, HttpServletResponse response) {
+	public List<Map<String, Object>> treeData(String module, @RequestParam(required=false) Long extId, HttpServletResponse response) {
 		response.setContentType("application/json; charset=UTF-8");
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		List<Category> list = categoryService.findByUser(true, module);

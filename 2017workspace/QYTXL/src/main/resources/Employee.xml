@@ -25,7 +25,7 @@
 	resultType="com.txey.qytxl.model.Employee">
 		SELECT  emp.ygid,emp.ygbh,emp.ygxm,dept.ksmc,emp.xmpy,emp.ygxb,emp.ksid,emp.sjch,emp.xnw,emp.userName,emp.password
 		FROM tb_employee emp LEFT JOIN tb_emp_dept dept
-		ON dept.ksid = emp.ksid  WHERE ygxm LIKE #{Name} OR xmpy LIKE #{Name}
+		ON dept.ksid = emp.ksid  WHERE ygxm LIKE #{Name} OR LOWER(xmpy) LIKE #{Name}
 	</select>
 
 	<select id="findEmpByBh" parameterType="String" resultType="com.txey.qytxl.model.Employee">

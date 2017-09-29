@@ -1,10 +1,13 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.modules.cms.dao;
 
-import com.thinkgem.jeesite.common.persistence.CrudDao;
-import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
+import org.springframework.stereotype.Repository;
+
+import com.thinkgem.jeesite.common.persistence.BaseDao;
 import com.thinkgem.jeesite.modules.cms.entity.Guestbook;
 
 /**
@@ -12,7 +15,7 @@ import com.thinkgem.jeesite.modules.cms.entity.Guestbook;
  * @author ThinkGem
  * @version 2013-8-23
  */
-@MyBatisDao
-public interface GuestbookDao extends CrudDao<Guestbook> {
+@Repository
+public class GuestbookDao extends BaseDao<Guestbook> {
 
 }

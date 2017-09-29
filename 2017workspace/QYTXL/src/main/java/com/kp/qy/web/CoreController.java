@@ -169,7 +169,6 @@ public class CoreController {
         employee.setXnw(request.getParameter("xnw"));
         System.out.println(employee);
         try{
-
             employeeService.updateEmp(employee);
             return new ModelAndView("Success");
         }catch (Exception e){
@@ -178,6 +177,7 @@ public class CoreController {
             return new ModelAndView("Failure");
         }
     }
+
 
 
 

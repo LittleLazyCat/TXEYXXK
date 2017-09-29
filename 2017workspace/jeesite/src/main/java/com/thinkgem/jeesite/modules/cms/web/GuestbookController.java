@@ -1,5 +1,7 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.modules.cms.web;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
@@ -49,7 +52,7 @@ public class GuestbookController extends BaseController {
 	@RequiresPermissions("cms:guestbook:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(Guestbook guestbook, HttpServletRequest request, HttpServletResponse response, Model model) {
-        Page<Guestbook> page = guestbookService.findPage(new Page<Guestbook>(request, response), guestbook); 
+        Page<Guestbook> page = guestbookService.find(new Page<Guestbook>(request, response), guestbook); 
         model.addAttribute("page", page);
 		return "modules/cms/guestbookList";
 	}
@@ -74,15 +77,15 @@ public class GuestbookController extends BaseController {
 		guestbookService.save(guestbook);
 		addMessage(redirectAttributes, DictUtils.getDictLabel(guestbook.getDelFlag(), "cms_del_flag", "保存")
 				+"留言'" + guestbook.getName() + "'成功");
-		return "redirect:" + adminPath + "/cms/guestbook/?repage&status=2";
+		return "redirect:"+Global.getAdminPath()+"/cms/guestbook/?repage&status=2";
 	}
 	
 	@RequiresPermissions("cms:guestbook:edit")
 	@RequestMapping(value = "delete")
-	public String delete(Guestbook guestbook, @RequestParam(required=false) Boolean isRe, RedirectAttributes redirectAttributes) {
-		guestbookService.delete(guestbook, isRe);
+	public String delete(String id, @RequestParam(required=false) Boolean isRe, RedirectAttributes redirectAttributes) {
+		guestbookService.delete(id, isRe);
 		addMessage(redirectAttributes, (isRe!=null&&isRe?"恢复审核":"删除")+"留言成功");
-		return "redirect:" + adminPath + "/cms/guestbook/?repage&status=2";
+		return "redirect:"+Global.getAdminPath()+"/cms/guestbook/?repage&status=2";
 	}
 
 }

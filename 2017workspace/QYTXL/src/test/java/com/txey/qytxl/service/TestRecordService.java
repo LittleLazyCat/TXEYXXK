@@ -32,6 +32,22 @@ public class TestRecordService {
 		}
 	}
 
+
+
+	@Test
+	public void getDeptByName() {
+		List<Dept> deptList = deptService.findDeptByName("xj");
+		String respContent = CoreService.deptMsg(deptList,"xj");
+		System.out.println(respContent);
+		for (Dept dl : deptList) {
+
+			System.out.println(dl);
+		}
+	}
+
+
+
+
 	@Test
 	public void getEmployee() {
 		List<Employee> employeeList = employeeService.getEmployee();
@@ -43,7 +59,7 @@ public class TestRecordService {
 
 	@Test
 	public void findEmpByuserName() {
-		List<Employee> employeeList = employeeService.findEmpByName("ZK");
+		List<Employee> employeeList = employeeService.findEmpByName("CDH");
 		for (Employee el : employeeList) {
 			System.out.println(el);
 		}

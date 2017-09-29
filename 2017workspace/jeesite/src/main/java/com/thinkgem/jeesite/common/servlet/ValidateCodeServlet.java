@@ -1,5 +1,7 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.common.servlet;
 
@@ -17,13 +19,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * 生成随机验证码
  * @author ThinkGem
- * @version 2014-7-27
+ * @version 2013-5-19
  */
 @SuppressWarnings("serial")
 public class ValidateCodeServlet extends HttpServlet {
@@ -131,9 +133,9 @@ public class ValidateCodeServlet extends HttpServlet {
 
 	private String createCharacter(Graphics g) {
 		char[] codeSeq = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J',
-				'K', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
+				'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
 				'X', 'Y', 'Z', '2', '3', '4', '5', '6', '7', '8', '9' };
-		String[] fontTypes = {"Arial","Arial Black","AvantGarde Bk BT","Calibri"}; 
+		String[] fontTypes = {"\u5b8b\u4f53","\u65b0\u5b8b\u4f53","\u9ed1\u4f53","\u6977\u4f53","\u96b6\u4e66"}; 
 		Random random = new Random();
 		StringBuilder s = new StringBuilder();
 		for (int i = 0; i < 4; i++) {

@@ -1,15 +1,15 @@
 /**
- * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ * Copyright &copy; 2012-2013 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
  */
 package com.thinkgem.jeesite.modules.cms.utils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.utils.StringUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.thinkgem.jeesite.common.mapper.JsonMapper;
 import com.thinkgem.jeesite.common.persistence.Page;
@@ -25,8 +25,6 @@ import com.thinkgem.jeesite.modules.cms.service.LinkService;
 import com.thinkgem.jeesite.modules.cms.service.SiteService;
 
 import javax.servlet.ServletContext;
-
-import org.springframework.ui.Model;
 
 /**
  * 内容管理工具类
@@ -51,7 +49,7 @@ public class CmsUtils {
 		List<Site> siteList = (List<Site>)CacheUtils.get(CMS_CACHE, "siteList");
 		if (siteList == null){
 			Page<Site> page = new Page<Site>(1, -1);
-			page = siteService.findPage(page, new Site());
+			page = siteService.find(page, new Site());
 			siteList = page.getList();
 			CacheUtils.put(CMS_CACHE, "siteList", siteList);
 		}
@@ -86,7 +84,7 @@ public class CmsUtils {
 			Category category = new Category();
 			category.setSite(new Site(siteId));
 			category.setParent(new Category("1"));
-			category.setInMenu(Global.SHOW);
+			category.setInMenu(Category.SHOW);
 			Page<Category> page = new Page<Category>(1, -1);
 			page = categoryService.find(page, category);
 			mainNavList = page.getList();
@@ -152,13 +150,10 @@ public class CmsUtils {
 	 * 			image	文章图片（1：有图片的文章）
 	 *          orderBy 排序字符串
 	 * @return
-	 * ${fnc:getArticleList(category.site.id, category.id, not empty pageSize?pageSize:8, 'posid:2, orderBy: \"hits desc\"')}"
 	 */
 	public static List<Article> getArticleList(String siteId, String categoryId, int number, String param){
 		Page<Article> page = new Page<Article>(1, number, -1);
-		Category category = new Category(categoryId, new Site(siteId));
-		category.setParentIds(categoryId);
-		Article article = new Article(category);
+		Article article = new Article(new Category(categoryId, new Site(siteId)));
 		if (StringUtils.isNotBlank(param)){
 			@SuppressWarnings({ "rawtypes" })
 			Map map = JsonMapper.getInstance().fromJson("{"+param+"}", Map.class);
@@ -166,14 +161,14 @@ public class CmsUtils {
 				article.setPosid(String.valueOf(map.get("posid")));
 			}
 			if (new Integer(1).equals(map.get("image"))){
-				article.setImage(Global.YES);
+				article.setImage(Article.YES);
 			}
 			if (StringUtils.isNotBlank((String)map.get("orderBy"))){
 				page.setOrderBy((String)map.get("orderBy"));
 			}
 		}
 		article.setDelFlag(Article.DEL_FLAG_NORMAL);
-		page = articleService.findPage(page, article, false);
+		page = articleService.find(page, article, false);
 		return page.getList();
 	}
 	
@@ -202,7 +197,7 @@ public class CmsUtils {
 			Map map = JsonMapper.getInstance().fromJson("{"+param+"}", Map.class);
 		}
 		link.setDelFlag(Link.DEL_FLAG_NORMAL);
-		page = linkService.findPage(page, link, false);
+		page = linkService.find(page, link, false);
 		return page.getList();
 	}
 	
@@ -279,35 +274,6 @@ public class CmsUtils {
             return src;
         }else{
             return context.getContextPath()+src;
-        }
-    }
-    
-    public static void addViewConfigAttribute(Model model, String param){
-        if(StringUtils.isNotBlank(param)){
-            @SuppressWarnings("rawtypes")
-			Map map = JsonMapper.getInstance().fromJson(param, Map.class);
-            if(map != null){
-                for(Object o : map.keySet()){
-                    model.addAttribute("viewConfig_"+o.toString(), map.get(o));
-                }
-            }
-        }
-    }
-
-    public static void addViewConfigAttribute(Model model, Category category){
-        List<Category> categoryList = Lists.newArrayList();
-        Category c = category;
-        boolean goon = true;
-        do{
-            if(c.getParent() == null || c.getParent().isRoot()){
-                goon = false;
-            }
-            categoryList.add(c);
-            c = c.getParent();
-        }while(goon);
-        Collections.reverse(categoryList);
-        for(Category ca : categoryList){
-        	addViewConfigAttribute(model, ca.getViewConfig());
         }
     }
 }
