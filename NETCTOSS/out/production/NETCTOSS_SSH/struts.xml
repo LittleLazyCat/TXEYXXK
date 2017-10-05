@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    <!--  公共的包，封装了通用的拦截器、通用的result  -->
+    <package name="netctoss" extends="json-default">
+        <interceptors>
+            <!--  异常处理拦截器  -->
+            <interceptor name="exceptionInterceptor" class="com.netctoss.interceptor.ExceptionInterceptor" />
+            <!--  拦截器栈  -->
+            <interceptor-stack name="netctossStack">
+                <interceptor-ref name="exceptionInterceptor" />
+                <!--  不要丢弃默认拦截器栈，里面有很多Struts2依赖的拦截器  -->
+                <interceptor-ref name="defaultStack" />
+            </interceptor-stack>
+        </interceptors>
+
+        <!--  设置 action 默认引用拦截器  -->
+        <default-interceptor-ref name="netctossStack" />
+
+        <!--   全局的 result ，包下所有的 action 都可以共用 -->
+        <global-results>
+            <!--  跳转到错误页面的 result  -->
+            <result name="error">/WEB-INF/main/error.jsp</result>
+        </global-results>
+
+    </package>
+
+    <package name="/cost" extends="netctoss">
+        <!--
+            由于使用 Spring 来管理 Action ，因此需要通过 Spring
+            容器来创建 Action , 因此 class 属性指定的组件的ID
+        -->
+        <action name="findCost" class="firstCostAction" method="load">
+            <!--  注入页容量  -->
+            <param name="pageSize">5</param>
+            <result name="success">/WEB-INF/cost/cost_list.jsp</result>
+        </action>
+
+        <!--  打开修改资费  -->
+        <action name="toUpdateCost" class="toUpdateCostAction" method="load">
+            <result name="success">/WEB-INF/cost/cost_update.jsp</result>
+        </action>
+
+        <!--  修改保存  -->
+        <action name="updateCost" class="updateCostAction" method="update">
+            <result name="success" type="redirectAction">cost/findCost</result>
+        </action>
+
+        <!--  打开新增资费  -->
+        <action name="toAddCost">
+            <result name="success">/WEB-INF/cost/cost_add.jsp</result>
+        </action>
+
+        <!--  新增保存  -->
+        <action name="addCost" class="AddCostAction" method="add">
+            <result name="success" type="redirectAction">cost/findCost</result>
+        </action>
+
+        <!--  删除资费   -->
+        <action name="deleteCost" class="deleteCostAction" method="delete">
+            <result name="success" type="redirectAction">cost/findCost</result>
+        </action>
+
+    </package>
+</struts>

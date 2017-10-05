@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <!-- 配置实体类和表的关系 -->
+    <!--
+        通过 dynamic-update 将当前对象设置为动态更新，
+        对象中没有发生变化的属性将不会拼入 update 语句。
+    -->
+    <class name="com.netctoss.entity.Cost" table="cost" dynamic-update="true">
+        <!-- 配置主键属性和字段的关系 -->
+        <id name="id" type="integer" column="cost_id" >
+            <!--用来指明主键的生成方式 -->
+            <generator class="sequence">
+                 <!--指定用于生成主键的 sequence-->
+                <param name="sequence">cost_seq</param>
+            </generator>
+        </id>
+        <!--<id name="id" column="cost_id" type="integer">-->
+            <!--<generator class="identity" />-->
+        <!--</id>-->
+        <!-- 配置实体类中属性与表中字段的关系 -->
+        <property name="name" type="string" column="name"/>
+        <property name="baseDuration" type="integer" column="base_duration" />
+        <property name="baseCost" type="double" column="base_cost" />
+        <property name="unitCost" type="double" column="unit_cost" />
+        <property name="status" type="string" column="status" />
+        <property name="descr" type="string" column="descr" />
+        <property name="createTime" type="timestamp" column="creatime" />
+        <property name="startTime" type="timestamp" column="startime" />
+        <property name="costType" type="string" column="cost_type" />
+    </class>
+
+</hibernate-mapping>

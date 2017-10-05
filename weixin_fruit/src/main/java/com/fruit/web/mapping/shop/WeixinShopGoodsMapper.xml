@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fruit.web.mapper.shop.WeixinShopGoodsMapper">
+	<select id="loadGoodsByAccountId" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		SELECT wsg.*,wsc.`NAME` AS catname FROM weixin_shop_goods wsg JOIN weixin_shop_category wsc ON wsg.`CATEGORY_ID` = wsc.`ID`
+	</select>
+	
+	<select id="loadGoodsByCategory" resultType="com.fruit.web.weixin.model.WeixinShopGoods">
+		SELECT * FROM weixin_shop_goods WHERE category_id=#{categoryId}
+	</select>
+</mapper>

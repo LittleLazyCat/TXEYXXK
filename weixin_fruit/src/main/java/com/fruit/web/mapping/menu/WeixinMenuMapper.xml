@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fruit.web.mapper.menu.MenuMapper">
+	<select id="createMenu" 
+		parameterType="com.fruit.web.weixin.model.MenuEntity">
+		insert into weixin_menuentity
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="accountId != null">
+				accountid,
+			</if>
+			<if test="menuKey != null">
+				menukey,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="orders != null">
+				orders,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			<if test="fatherId != null">
+				fatherid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="accountId != null">
+				#{accountId,jdbcType=VARCHAR},
+			</if>
+			<if test="menuKey != null">
+				#{menuKey,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="orders != null">
+				#{orders,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+			<if test="fatherId != null">
+				#{fatherId,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</select>
+</mapper>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fruit.web.mapper.shop.WeixinShopCartMapper">
+	<select id="loadShopCartByAccountId" resultType="map">
+		SELECT wsc.*,wsg.`TITLE` FROM weixin_shop_cart wsc JOIN weixin_shop_goods wsg ON wsc.goods_id = wsg.`ID`
+	</select>
+	
+	<select id="getShopCartByGoodsId" resultType="com.fruit.web.weixin.model.WeixinShopCart">
+		SELECT * FROM weixin_shop_cart WHERE goods_id=#{goodsId}
+	</select>
+</mapper>

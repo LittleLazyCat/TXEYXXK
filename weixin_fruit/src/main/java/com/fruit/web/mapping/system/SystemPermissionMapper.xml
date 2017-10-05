@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fruit.web.service.system.SystemPermissionService">
+	<select id="permissionList" parameterType="String" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		SELECT p.* FROM system_permission p
+		INNER JOIN system_role_permission rp ON p.ID=rp.PERMISSION_ID
+		INNER JOIN system_role r ON r.id=rp.ROLE_ID
+		INNER JOIN system_user_role ur ON ur.ROLE_ID =rp.ROLE_ID
+		INNER JOIN SYSTEM_USER u ON u.id = ur.USER_ID
+		WHERE u.id=#{currentUserId} ORDER BY p.sort
+	</select>
+	
+	<select id="getUserPermission" parameterType="String" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		SELECT p.* FROM system_role_permission rp , system_permission p WHERE rp.PERMISSION_ID = p.id AND rp.ROLE_ID = #{roleId}
+	</select>
+	
+	<select id="permissionAllList"  resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		SELECT p.* FROM system_permission p ORDER BY p.sort
+	</select>
+</mapper>

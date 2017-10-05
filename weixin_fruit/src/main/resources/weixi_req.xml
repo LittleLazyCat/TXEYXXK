@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<weixin-req>
+     <!-- sub.获取用户详细信息 -->
+    <req key="getUserBaseInfo" method="get" datatype="param" url="https://api.weixin.qq.com/cgi-bin/user/info?1=1"></req>
+    <req key="getUserInfoList" method="get" datatype="param" url="https://api.weixin.qq.com/cgi-bin/user/get?1=1"></req>
+</weixin-req>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fruit.web.mapper.system.count.SystemLogMapper">
+	<select id="list" parameterType="map" resultType="SystemLog">
+		select * from system_log where 1=1
+		<!-- 排序 -->
+		<if test="sortName != null and sortName != ''">
+			ORDER BY ${sortName}
+		</if>
+	  	limit #{offset},#{pagesize}
+	</select>
+	
+	 <!-- 查询总记录数 -->
+  <select id="listCount" parameterType="map" resultType="long">
+  	select count(*) from system_log 
+  	where 1=1
+  </select>	  
+</mapper>

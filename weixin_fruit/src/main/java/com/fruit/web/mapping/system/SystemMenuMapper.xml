@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fruit.web.service.system.SystemMenuService">
+	<select id="select"  resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		SELECT * FROM permission p WHERE p.`PID` IS NULL order by SORT asc
+	</select>
+	
+	<select id="selectSubMenu" parameterType="String" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		  SELECT * FROM permission p WHERE p.`PID`= #{pid}
+	</select>
+	
+	<select id="selectPermCode" parameterType="String" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		  SELECT *,(SELECT p2.name FROM permission p2 WHERE p2.id = permission.`pid` AND p2.url !='') AS pname FROM permission WHERE perm_code !='' 
+	</select>
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<description>spring-mvc 基本配置</description>
+	
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+
+	<context:component-scan base-package="com.fruit.web.controller" use-default-filters="false">
+		<context:include-filter type="annotation"  expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<mvc:resources location="/static/" mapping="/static/**"></mvc:resources>
+	<mvc:resources mapping="/resources/**" location="/resources/" cache-period="31556926" >
+		<mvc:resource-chain resource-cache="false" auto-registration="false">
+			<mvc:resolvers>
+	        	<bean class="org.springframework.web.servlet.resource.GzipResourceResolver"/>
+	        	<bean class="org.springframework.web.servlet.resource.PathResourceResolver"/>
+	        </mvc:resolvers>
+        </mvc:resource-chain>
+	</mvc:resources>
+
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8" />
+			</bean>
+		</mvc:message-converters>
+		
+		 <mvc:argument-resolvers>
+            <bean class="com.fruit.core.form.FormModelMethodArgumentResolver"/>
+            <bean class="com.fruit.core.form.CurrentUserMethodArgumentResolver"/>
+        </mvc:argument-resolvers>
+	</mvc:annotation-driven>
+	
+	<!-- 定义JSP文件的位置 -->
+	<bean id="viewPage" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/page/"  />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置上传文件的最大尺寸为1MB -->
+		<property name="maxUploadSize">
+			<value>1048576</value>
+		</property>
+	</bean>
+	
+	<bean id="exceptionHandler" class="com.fruit.core.exception.MyExceptionHandler" />
+	
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
+		<property name="defaultErrorView" value="error/500"></property>   <!-- 默认为500，系统错误(error.jsp) -->
+		<property name="defaultStatusCode" value="404"></property>
+		<property name="statusCodes"><!-- 配置多个statusCode -->
+			<props>
+				<prop key="error">500</prop>  <!-- error.jsp -->
+				<prop key="error1">404</prop>    <!-- error1.jsp -->
+			</props>
+		</property>
+		<property name="exceptionMappings">  
+			<props>
+				<prop key="org.apache.shiro.authz.UnauthenticatedException">redirect:/system/login</prop>
+				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
+            </props>  
+		</property>  
+    </bean>
+
+	<!-- 配置基础拦截器 -->
+	<mvc:interceptors>
+        <bean class="com.fruit.core.web.interceptor.BaseInterceptor"/>  
+    </mvc:interceptors>
+</beans>
