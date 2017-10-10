@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.txey.wxgzh.zyqd.dao.ExpenseDao">
+
+
+    <select id="getExpenseByZyh" resultType="Expense">
+        SELECT zyh,fyxh,TRUNC(jfrq) AS jfrq,fydj,fysl,zjje,zfje,fyxm,sfmc
+        FROM zy_fymx fymx ,gy_sfxm sfxm WHERE fymx.fyxm = sfxm.fylb
+        AND fymx.zyh =(SELECT brry.zyh FROM  zy_brry brry WHERE  brry.zyhm = #{zyhm})
+    </select>
+
+    <select id="getExpenseDetailByzyh" resultType="Expense">
+        select zyh,fyxh,TRUNC(jfrq) AS jfrq,fydj,fysl,zjje,zfje,fyxm,sfmc from zy_fymx fymx
+        LEFT JOIN gy_sfxm sfxm ON fymx.fyxm = sfxm.fylb
+        where fymx.zyh =
+        (SELECT zyh FROM  zy_brry WHERE  zyhm = #{zyhm})
+        AND
+        TO_CHAR(jfrq,'yyyy-MM-dd') = #{jfrq}
+        ORDER BY jfrq,fyxm
+    </select>
+
+</mapper> 

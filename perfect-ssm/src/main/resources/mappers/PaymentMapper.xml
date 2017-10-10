@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.txey.wxgzh.zyqd.dao.PaymentDao">
+    <resultMap type="Payment" id="PaymentResult">
+      <constructor>
+          <idArg column="zyh" javaType="int"/>
+          <arg column="jkrq" javaType="java.util.Date"/>
+          <arg column="jkje" javaType="java.math.BigDecimal"/>
+
+      </constructor>
+    </resultMap>
+
+    <select id="getPaymentByZyh" parameterType="String" resultMap="PaymentResult">
+        select zyh,jkrq,jkje from zy_tbkk
+        where zyh =
+        (SELECT zyh FROM  zy_brry WHERE  zyhm = #{zyhm})
+    </select>
+</mapper> 
